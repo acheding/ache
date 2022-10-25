@@ -19,22 +19,26 @@ const filter = ref({
   search: "",
 });
 
-onMounted(() => {
+onMounted(() =>
+{
   getBlog();
 });
 
 watch(
   () => filter.value.search,
-  () => {
+  () =>
+  {
     getBlog();
   }
 );
 
-const jump = (url) => {
+const jump = (url) =>
+{
   window.open("https://blog.csdn.net/bDreamer/article/details/" + url);
 };
 
-const getBlog = async (index, type, sort) => {
+const getBlog = async (index, type, sort) =>
+{
   if (type) {
     if (type === "all") filter.value.type = "";
     else filter.value.type = type;
@@ -53,7 +57,8 @@ const getBlog = async (index, type, sort) => {
   blogs.value = res.data;
 };
 
-const highLight = (allText, keyword) => {
+const highLight = (allText, keyword) =>
+{
   // let specialCharacter = ["\\", "(", ")", "_", "*", "+", ".", "[", "]", "?"];
   // specialCharacter.map((v) => {
   //   let qwq = new RegExp("\\" + v, "gim");
@@ -99,7 +104,8 @@ const highLight = (allText, keyword) => {
           <p v-html="
             highLight(item.detail ? item.detail : item.title, filter.search)
           "></p>
-          <img v-if="item.pic" :src="`/blog/${item.pic}.png`" />
+          <!-- <img v-if="item.pic" :src="`/blog/${item.pic}.png`" /> -->
+          <img v-if="item.pic" :src="item.pic" />
           <p>
             收录于 <strong>{{ translate.type(item.type) }}</strong>
           </p>
