@@ -162,7 +162,7 @@ const highLight = (allText, keyword) =>
 
     img {
       max-width: 100%;
-      max-height: 240px;
+      // max-height: 240px;
     }
 
     &:hover {

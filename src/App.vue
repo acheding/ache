@@ -76,10 +76,6 @@ const jump = () => window.open('https://beian.miit.gov.cn/')
   }
 }
 
-.bodyBg {
-  background: #fff;
-}
-
 .record {
   color: #aaa;
   font-size: 12px;
