@@ -163,7 +163,7 @@ const translate = async () => {
     to: formInfo.value.lang,
     appid: '20220807001297216',
     salt: Date.now(),
-    sign: md5('20220807001297216' + formInfo.value.zhcn + Date.now() + 'oRy8XTp__OybVNxX2Df9'),
+    sign: md5('20220807001297216' + formInfo.value.zhcn + Date.now() + 'RKyiNw8Sh2o831RiXv9E'),
   }
   state.loading = true
   let res = await axios.get('/translate', { params: transData })

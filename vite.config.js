@@ -18,7 +18,7 @@ export default defineConfig({
         target: "https://api.lovelive.tools/", //接口的前缀
       },
       "/ache": {
-        target: "http://82.157.160.30:8080/",
+        target: "http://101.42.230.165:8080/",
         // target: "http://localhost:8080/",
       },
       "/chp": {
