@@ -192,18 +192,18 @@ const register = () => {
   </div>
   <div class="info" :class="{ infoFixed: isFixed }">
     <div class="author-vx">
-      <img src="/menu/vx.png" />
+      <img src="https://zhang.beer:9999/ache/beer/menu/vx.png" />
     </div>
     <div class="author-name">
       <strong>zhang</strong>
     </div>
     <div class="links">
       <div @click="jump('gitee')">
-        <img src="/menu/gitee.png" />
+        <img src="https://zhang.beer:9999/ache/beer/menu/gitee.png" />
         <span>Gitee</span>
       </div>
       <div @click="jump('csdn')">
-        <img src="/menu/csdn.png" />
+        <img src="https://zhang.beer:9999/ache/beer/menu/csdn.png" />
         <span>CSDN</span>
       </div>
     </div>
@@ -211,7 +211,7 @@ const register = () => {
   <el-dialog v-model="showDialog" custom-class="my-dialog login">
     <template #title>
       <img
-        src="/menu/login.png"
+        src="https://zhang.beer:9999/ache/beer/menu/login.png"
         style="height: 20px; width: 40px; vertical-align: -16%"
       />
     </template>

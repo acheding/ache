@@ -150,7 +150,7 @@ const jump = () => {
   <div class="cards" :class="{ smallScreen: smallScreen }">
     <div v-for="item in apis" :key="item.api" class="card" @click="getWords(item)">
       <div class="portrait">
-        <img :src="`/word/${item.icon}.png`" />
+        <img :src="`https://zhang.beer:9999/ache/beer/word/${item.icon}.png`" />
       </div>
       <div class="content">
         <div>
@@ -165,7 +165,7 @@ const jump = () => {
     :custom-class="`my-dialog ${smallScreen ? 'smallNormal' : state.dialogData.icon === 'hdpic' ? 'normal' : 'small'}`">
     <template #title>
       <div class="title">
-        <img :src="`/word/${state.dialogData.icon}.png`" />
+        <img :src="`https://zhang.beer:9999/ache/beer/word/${state.dialogData.icon}.png`" />
         <span>{{ state.dialogData.name }}</span>
         <el-tooltip v-if="state.dialogData.icon !== 'hdpic'" content="点击句子可复制到剪切板，点击添加可跳转到首页添加此句子。"
           placement="top-start" effect="light">

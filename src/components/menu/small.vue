@@ -253,7 +253,7 @@ const register = () => {
   <el-dialog v-model="showDialog" custom-class="my-dialog smallLogin">
     <template #title>
       <img
-        src="/menu/login.png"
+        src="https://zhang.beer:9999/ache/beer/menu/login.png"
         style="height: 20px; width: 40px; vertical-align: -16%"
       />
     </template>
