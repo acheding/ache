@@ -1,6 +1,6 @@
 <script setup>
 import { onBeforeUnmount, onMounted, ref, watch, reactive } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute,useRouter } from "vue-router";
 import menu from "../../../menu.json";
 import { useStore } from "vuex";
 import { ElMessage, ElMessageBox } from "element-plus";
@@ -10,6 +10,7 @@ import md5 from "js-md5";
 
 const store = useStore();
 const route = useRoute();
+const router = useRouter();
 const activeIndex = ref();
 const isFixed = ref(false);
 const showDialog = ref(false);
@@ -36,8 +37,12 @@ const rules = reactive({
 watch(
   () => route.matched,
   (newValue, oldValue) => {
-    activeIndex.value = newValue[newValue.length - 1].path;
-    document.title = "Ache | " + newValue[newValue.length - 1].name;
+    if (newValue.length) {
+      activeIndex.value = newValue[newValue.length - 1].path;
+      document.title = "Ache | " + newValue[newValue.length - 1].name;
+    } else {
+      window.open('https://zhang.beer:9999/ache/beer/404.png')
+    }
   }
 );
 onMounted(() => {
@@ -148,12 +153,7 @@ const register = () => {
 <template>
   <div class="brand">
     <div @click="showDialog = true">
-      <ICON
-        :class="{ logined: store.state.user.info }"
-        class="unLogin"
-        code="sun"
-        :size="32"
-      />
+      <ICON :class="{ logined: store.state.user.info }" class="unLogin" code="sun" :size="32" />
     </div>
     <span>轻松点，这一生，就当来旅游</span>
   </div>
@@ -166,23 +166,15 @@ const register = () => {
               <ICON :code="item.icon" />
               <span class="title">{{ item.title }}</span>
             </template>
-            <el-menu-item
-              class="el-menu-item"
-              v-for="sub in item.children"
-              :key="sub.name"
-              :index="item.router + sub.router"
-            >
+            <el-menu-item class="el-menu-item" v-for="sub in item.children" :key="sub.name"
+              :index="item.router + sub.router">
               <ICON :code="item.icon" />
               <span class="title">{{ sub.title }}</span>
             </el-menu-item>
           </el-sub-menu>
         </template>
         <template v-else>
-          <el-menu-item
-            class="el-menu-item"
-            :key="item.name"
-            :index="item.router"
-          >
+          <el-menu-item class="el-menu-item" :key="item.name" :index="item.router">
             <ICON :code="item.icon" />
             {{ item.title }}
           </el-menu-item>
@@ -210,49 +202,23 @@ const register = () => {
   </div>
   <el-dialog v-model="showDialog" custom-class="my-dialog login">
     <template #title>
-      <img
-        src="https://zhang.beer:9999/ache/beer/menu/login.png"
-        style="height: 20px; width: 40px; vertical-align: -16%"
-      />
+      <img src="https://zhang.beer:9999/ache/beer/menu/login.png"
+        style="height: 20px; width: 40px; vertical-align: -16%" />
     </template>
     <el-form :model="formInfo" ref="form" :rules="rules" :key="formKey">
       <el-form-item label="用户" prop="user">
-        <el-input
-          v-model="formInfo.user"
-          clearable
-          v-on:keyup.enter="submitForm"
-        ></el-input>
+        <el-input v-model="formInfo.user" clearable v-on:keyup.enter="submitForm"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="pwd">
-        <el-input
-          type="password"
-          v-model="formInfo.pwd"
-          autocomplete="off"
-          show-password
-          clearable
-          v-on:keyup.enter="submitForm"
-        ></el-input>
+        <el-input type="password" v-model="formInfo.pwd" autocomplete="off" show-password clearable
+          v-on:keyup.enter="submitForm"></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
-      <el-button
-        type="success"
-        v-if="store.state.user.info.role === 'admin'"
-        @click="register"
-        >注册</el-button
-      >
-      <el-button
-        type="success"
-        v-if="!store.state.user.info"
-        @click="submitForm"
-        >登录</el-button
-      >
-      <el-button type="primary" v-if="!store.state.user.info" @click="resetForm"
-        >重置</el-button
-      >
-      <el-button type="danger" v-if="store.state.user.info" @click="exit"
-        >退出登录</el-button
-      >
+      <el-button type="success" v-if="store.state.user.info.role === 'admin'" @click="register">注册</el-button>
+      <el-button type="success" v-if="!store.state.user.info" @click="submitForm">登录</el-button>
+      <el-button type="primary" v-if="!store.state.user.info" @click="resetForm">重置</el-button>
+      <el-button type="danger" v-if="store.state.user.info" @click="exit">退出登录</el-button>
     </template>
   </el-dialog>
 </template>

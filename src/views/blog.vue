@@ -113,7 +113,7 @@ const highLight = (allText, keyword) =>
       </el-timeline-item>
     </el-timeline>
     <div v-else>
-      <el-empty image="/blog/noData.png" description="空空如也~" :image-size="320"></el-empty>
+      <el-empty image="https://zhang.beer:9999/ache/beer/blog/noData.png" description="空空如也~" :image-size="320"></el-empty>
     </div>
   </div>
 </template>
