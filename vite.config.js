@@ -16,22 +16,28 @@ export default defineConfig({
     proxy: {
       "/api": {
         target: "https://api.lovelive.tools/", //接口的前缀
+        secure: false,
       },
       "/ache": {
         target: "http://101.42.230.165:8080/",
         // target: "http://localhost:8080/",
+        secure: false,
       },
       "/chp": {
         target: "https://api.shadiao.pro/",
+        secure: false,
       },
       "/pyq": {
         target: "https://api.shadiao.pro/",
+        secure: false,
       },
       "/du": {
         target: "https://api.shadiao.pro/",
+        secure: false,
       },
       "/translate": {
-        target: "https://api.fanyi.baidu.com/api/trans/vip",
+        target: "https://fanyi-api.baidu.com/api/trans/vip",
+        secure: false,
       },
       // "/ip": "https://pv.sohu.com/cityjson?ie=utf-8",
       // "/ip": {

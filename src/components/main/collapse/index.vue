@@ -161,7 +161,7 @@ const translate = async () => {
     q: formInfo.value.zhcn,
     from: 'auto',
     to: formInfo.value.lang,
-    appid: '20220807001297216',
+    appid: '20220807001297215',
     salt: Date.now(),
     sign: md5('20220807001297216' + formInfo.value.zhcn + Date.now() + 'RKyiNw8Sh2o831RiXv9E'),
   }

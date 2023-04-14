@@ -1,6 +1,6 @@
 <script setup>
 import { onBeforeUnmount, onMounted, ref, watch, reactive } from "vue";
-import { useRoute,useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import menu from "../../../menu.json";
 import { useStore } from "vuex";
 import { ElMessage, ElMessageBox } from "element-plus";
@@ -37,12 +37,8 @@ const rules = reactive({
 watch(
   () => route.matched,
   (newValue, oldValue) => {
-    if (newValue.length) {
-      activeIndex.value = newValue[newValue.length - 1].path;
-      document.title = "Ache | " + newValue[newValue.length - 1].name;
-    } else {
-      window.open('https://zhang.beer:9999/ache/beer/404.png')
-    }
+    activeIndex.value = newValue[newValue.length - 1].path;
+    document.title = "Ache | " + newValue[newValue.length - 1].name;
   }
 );
 onMounted(() => {
