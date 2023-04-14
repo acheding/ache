@@ -14,25 +14,33 @@ export default defineConfig({
     port: 3333, // 打开的端口号
     open: true, // 运行时打开浏览器
     proxy: {
-      "/api": {
-        target: "https://api.lovelive.tools/", //接口的前缀
+      "/trash": {
+        target: "https://zhang.beer/other/",
+        secure: false,
+      },
+      "/green": {
+        target: "https://zhang.beer/other/",
+        secure: false,
+      },
+      "/one": {
+        target: "https://zhang.beer/other/", //接口的前缀
         secure: false,
       },
       "/ache": {
-        target: "http://101.42.230.165:8080/",
+        target: "https://zhang.beer/",
         // target: "http://localhost:8080/",
         secure: false,
       },
       "/chp": {
-        target: "https://api.shadiao.pro/",
+        target: "https:/zhang.beer/other/",
         secure: false,
       },
       "/pyq": {
-        target: "https://api.shadiao.pro/",
+        target: "https:/zhang.beer/other/",
         secure: false,
       },
       "/du": {
-        target: "https://api.shadiao.pro/",
+        target: "https:/zhang.beer/other/",
         secure: false,
       },
       "/translate": {

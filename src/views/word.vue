@@ -22,13 +22,13 @@ const apis = ref([
   {
     icon: "trash",
     name: "trash words generator",
-    api: "api/SweetNothings/Serialization/Json",
+    api: "trash",
     abstract: "学学土味烧话。",
   },
   {
     icon: "tea",
     name: "green tea words generator",
-    api: "api/SweetNothings/Web/0",
+    api: "green",
     abstract: "原来这就是绿茶。",
   },
   {
@@ -40,7 +40,7 @@ const apis = ref([
   {
     icon: "one",
     name: "一言",
-    api: "https://v1.hitokoto.cn",
+    api: "one",
     abstract:
       "动漫也好、小说也好、网络也好，不论在哪里，总有那么一两个句子能穿透你的心。一言指的就是一句话，可以是动漫中的台词，也可以是网络上的各种小段子。 或是感动，或是开心，亦或是单纯的回忆。",
   },
@@ -167,8 +167,8 @@ const jump = () => {
       <div class="title">
         <img :src="`https://zhang.beer:9999/ache/beer/word/${state.dialogData.icon}.png`" />
         <span>{{ state.dialogData.name }}</span>
-        <el-tooltip v-if="state.dialogData.icon !== 'hdpic'" content="点击句子可复制到剪切板，点击添加可跳转到首页添加此句子。"
-          placement="top-start" effect="light">
+        <el-tooltip v-if="state.dialogData.icon !== 'hdpic'" content="点击句子可复制到剪切板，点击添加可跳转到首页添加此句子。" placement="top-start"
+          effect="light">
           <ICON code="about" />
         </el-tooltip>
       </div>
