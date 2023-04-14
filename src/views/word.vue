@@ -22,38 +22,38 @@ const apis = ref([
   {
     icon: "trash",
     name: "trash words generator",
-    api: "trash",
+    api: "other/trash",
     abstract: "学学土味烧话。",
   },
   {
     icon: "tea",
     name: "green tea words generator",
-    api: "green",
+    api: "other/green",
     abstract: "原来这就是绿茶。",
   },
   {
     icon: "rainbow",
     name: "彩虹屁",
-    api: "chp",
+    api: "other/chp",
     abstract: "快速生成彩虹屁，快去夸夸ta。",
   },
   {
     icon: "one",
     name: "一言",
-    api: "one",
+    api: "other/one",
     abstract:
       "动漫也好、小说也好、网络也好，不论在哪里，总有那么一两个句子能穿透你的心。一言指的就是一句话，可以是动漫中的台词，也可以是网络上的各种小段子。 或是感动，或是开心，亦或是单纯的回忆。",
   },
   {
     icon: "pyq",
     name: "朋友圈文案",
-    api: "pyq",
+    api: "other/pyq",
     abstract: "朋友圈文案（反正我不会发）。",
   },
   {
     icon: "soup",
     name: "毒鸡汤",
-    api: "du",
+    api: "other/du",
     abstract: "没得一句好听的话。",
   },
   {

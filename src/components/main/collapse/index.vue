@@ -166,7 +166,7 @@ const translate = async () => {
     sign: md5('20220807001297216' + formInfo.value.zhcn + Date.now() + 'RKyiNw8Sh2o831RiXv9E'),
   }
   state.loading = true
-  let res = await axios.get('/translate', { params: transData })
+  let res = await axios.get('other/translate', { params: transData })
   state.loading = false
   formInfo.value.enus = res.data.trans_result[0].dst
 }
