@@ -4,10 +4,6 @@ class TRANSLATE {
       return "VUE";
     } else if (type === "css") {
       return "CSS";
-    } else if (type === "js") {
-      return "JavaScript";
-    } else if (type === "es6") {
-      return "ES6";
     } else if (type === "micro") {
       return "微前端";
     } else if (type === "server") {

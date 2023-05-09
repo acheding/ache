@@ -11,7 +11,7 @@ const state = reactive({
   active: 0,
   reverseActive: false,
 });
-const blogType = ref(["all", "vue", "css", "js", "es6", "micro", "server"]);
+const blogType = ref(["all", "vue", "css", "micro", "server"]);
 const blogs = ref([]);
 const filter = ref({
   sort: "",
@@ -32,9 +32,9 @@ watch(
   }
 );
 
-const jump = (url) =>
+const jump = (type, url) =>
 {
-  window.open("https://blog.csdn.net/bDreamer/article/details/" + url);
+  window.open("https://zhang.beer/vuepress/blog/" + type + '/' + url + '.html');
 };
 
 const getBlog = async (index, type, sort) =>
@@ -99,11 +99,10 @@ const highLight = (allText, keyword) =>
     </div>
     <el-timeline v-if="blogs.length">
       <el-timeline-item v-for="item in blogs" :timestamp="item.time" :color="item.color" placement="top">
-        <el-card @click="jump(item.url)">
+        <el-card @click="jump(item.type, item.url)">
           <h3 v-html="highLight(item.title, filter.search)"></h3>
-          <p v-html="
-            highLight(item.detail ? item.detail : item.title, filter.search)
-          "></p>
+          <p v-html="highLight(item.detail ? item.detail : item.title, filter.search)
+            "></p>
           <!-- <img v-if="item.pic" :src="`/blog/${item.pic}.png`" /> -->
           <img v-if="item.pic" :src="item.pic" />
           <p>
@@ -113,7 +112,8 @@ const highLight = (allText, keyword) =>
       </el-timeline-item>
     </el-timeline>
     <div v-else>
-      <el-empty image="https://zhang.beer:9999/ache/beer/blog/noData.png" description="空空如也~" :image-size="320"></el-empty>
+      <el-empty image="https://zhang.beer:9999/ache/beer/blog/noData.png" description="空空如也~"
+        :image-size="320"></el-empty>
     </div>
   </div>
 </template>
