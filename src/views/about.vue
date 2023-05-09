@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref, onMounted } from "vue";
+import { reactive, ref, onBeforeMount } from "vue";
 import axios from "axios";
 import * as echarts from "echarts";
 import { useStore } from "vuex";
@@ -35,18 +35,21 @@ const state = reactive({
 
 const tableData = ref([]);
 
-onMounted(() => {
+onBeforeMount(() =>
+{
   getTable();
 });
 
-const getTable = async () => {
+const getTable = async () =>
+{
   let res = await axios.get("/ache/visit/get-visitors");
   tableData.value = res.data;
   getLineChart();
   getCakeChart();
 };
 
-const getLineChart = () => {
+const getLineChart = () =>
+{
   state.chartNumbers = [0, 0, 0, 0, 0, 0, 0];
   for (let item in tableData.value) {
     // let temp0 = res.data[item].time;
@@ -79,7 +82,8 @@ const getLineChart = () => {
       textStyle: {
         align: "left",
       },
-      formatter: function (param) {
+      formatter: function (param)
+      {
         let time = param[0].seriesName + "：" + param[0].axisValue + "点";
         let num = param[0].marker + "访问次数：" + param[0].value + "次";
         return "<div>" + time + "</br>" + num + "</div>";
@@ -105,7 +109,8 @@ const getLineChart = () => {
   });
 };
 
-const getCakeChart = () => {
+const getCakeChart = () =>
+{
   for (let i in state.chartDevice) {
     state.chartDevice[i].value = 0;
   }
@@ -162,7 +167,8 @@ const getCakeChart = () => {
   });
 };
 
-const deleteVisit = async (id, evt) => {
+const deleteVisit = async (id, evt) =>
+{
   if (evt) {
     let target = evt.target; // 取消聚焦
     if (target.nodeName == "SPAN") {
@@ -180,58 +186,27 @@ const deleteVisit = async (id, evt) => {
 <template>
   <h1>近期访客</h1>
 
-  <el-table
-    :data="tableData"
-    stripe
-    style="width: 100%"
-    max-height="480"
-    :default-sort="{ prop: 'id', order: 'descending' }"
-    v-if="!props.smallScreen"
-  >
+  <el-table :data="tableData" stripe style="width: 100%" max-height="480"
+    :default-sort="{ prop: 'id', order: 'descending' }" v-if="!props.smallScreen">
     <el-table-column type="index" label="#" width="50" align="center">
     </el-table-column>
     <el-table-column prop="time" label="时间" min-width="200" sortable>
     </el-table-column>
     <el-table-column prop="ipAddress" label="IP属地" min-width="150">
     </el-table-column>
-    <el-table-column
-      prop="os"
-      label="操作系统"
-      show-overflow-tooltip
-      min-width="250"
-    >
+    <el-table-column prop="os" label="操作系统" show-overflow-tooltip min-width="250">
     </el-table-column>
-    <el-table-column
-      prop="screen"
-      label="屏幕分辨率"
-      show-overflow-tooltip
-      min-width="150"
-    >
+    <el-table-column prop="screen" label="屏幕分辨率" show-overflow-tooltip min-width="150">
     </el-table-column>
-    <el-table-column
-      label="操作"
-      min-width="100"
-      v-if="store.state.user.info.role === 'admin'"
-    >
+    <el-table-column label="操作" min-width="100" v-if="store.state.user.info.role === 'admin'">
       <template #default="scope">
-        <el-button
-          size="small"
-          type="danger"
-          @click="deleteVisit(scope.row.id, $event)"
-          >Delete</el-button
-        >
+        <el-button size="small" type="danger" @click="deleteVisit(scope.row.id, $event)">Delete</el-button>
       </template>
     </el-table-column>
   </el-table>
 
-  <el-table
-    :data="tableData"
-    stripe
-    style="width: 100%; font-size: 10px"
-    max-height="480"
-    :default-sort="{ prop: 'id', order: 'descending' }"
-    v-else
-  >
+  <el-table :data="tableData" stripe style="width: 100%; font-size: 10px" max-height="480"
+    :default-sort="{ prop: 'id', order: 'descending' }" v-else>
     <el-table-column type="index" label="#" width="20" align="center">
     </el-table-column>
     <el-table-column prop="time" label="时间" sortable min-width="80">
@@ -246,12 +221,7 @@ const deleteVisit = async (id, evt) => {
     <el-table-column prop="screen" label="分辨率"> </el-table-column>
     <el-table-column label="操作" v-if="store.state.user.info.role === 'admin'">
       <template #default="scope">
-        <el-button
-          size="small"
-          type="danger"
-          @click="deleteVisit(scope.row.id, $event)"
-          >Delete</el-button
-        >
+        <el-button size="small" type="danger" @click="deleteVisit(scope.row.id, $event)">Delete</el-button>
       </template>
     </el-table-column>
   </el-table>

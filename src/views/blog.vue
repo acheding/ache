@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch, reactive } from "vue";
+import { ref, onBeforeMount, watch, reactive } from "vue";
 import axios from "axios";
 import translate from "../utils/translate.js";
 
@@ -11,7 +11,7 @@ const state = reactive({
   active: 0,
   reverseActive: false,
 });
-const blogType = ref(["all", "vue", "css", "micro", "server"]);
+const blogType = ref(["all", "css", "vue", "micro", "server"]);
 const blogs = ref([]);
 const filter = ref({
   sort: "",
@@ -19,7 +19,7 @@ const filter = ref({
   search: "",
 });
 
-onMounted(() =>
+onBeforeMount(() =>
 {
   getBlog();
 });
@@ -34,7 +34,8 @@ watch(
 
 const jump = (type, url) =>
 {
-  window.open("https://zhang.beer/vuepress/blog/" + type + '/' + url + '.html');
+  let suffix = url ? '/' + url + '.html' : ''
+  window.open("https://zhang.beer/vuepress/blog/" + type + suffix);
 };
 
 const getBlog = async (index, type, sort) =>
@@ -79,6 +80,14 @@ const highLight = (allText, keyword) =>
     } else return allText;
   } else return allText;
 };
+
+const getColor = (color) =>
+{
+  if (color) return color
+  else return '#' + Math.floor((Math.random() * 255)).toString(16) +
+    Math.floor((Math.random() * 255)).toString(16) +
+    Math.floor((Math.random() * 255)).toString(16)
+}
 </script>
 
 <template>
@@ -98,15 +107,15 @@ const highLight = (allText, keyword) =>
       </div>
     </div>
     <el-timeline v-if="blogs.length">
-      <el-timeline-item v-for="item in blogs" :timestamp="item.time" :color="item.color" placement="top">
-        <el-card @click="jump(item.type, item.url)">
-          <h3 v-html="highLight(item.title, filter.search)"></h3>
-          <p v-html="highLight(item.detail ? item.detail : item.title, filter.search)
-            "></p>
+      <el-timeline-item v-for="item in blogs" :timestamp="item.time" :color="getColor(item.color)" placement="top">
+        <el-card>
+          <h3 v-html="highLight(item.title, filter.search)" @click="jump(item.type, item.url)"></h3>
+          <p v-html="highLight(item.detail ? item.detail : item.title, filter.search)"></p>
           <!-- <img v-if="item.pic" :src="`/blog/${item.pic}.png`" /> -->
-          <img v-if="item.pic" :src="item.pic" />
-          <p>
-            收录于 <strong>{{ translate.type(item.type) }}</strong>
+          <!-- <img v-if="item.pic" :src="item.pic" /> -->
+          <el-image v-if="item.pic" :src="item.pic" lazy :preview-src-list="[item.pic]"></el-image>
+          <p style="cursor:pointer">
+            收录于 <strong @click="jump(item.type)">{{ translate.type(item.type) }}</strong>
           </p>
         </el-card>
       </el-timeline-item>
@@ -166,7 +175,6 @@ const highLight = (allText, keyword) =>
     }
 
     &:hover {
-      cursor: pointer;
       box-shadow: 8px 8px 12px 0px rgba(0, 0, 0, 0.08);
     }
 

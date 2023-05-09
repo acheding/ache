@@ -1,10 +1,9 @@
 <script setup>
-import { onMounted, reactive, ref, nextTick, onBeforeMount } from "vue";
+import { reactive, ref, nextTick, onBeforeMount } from "vue";
 import axios from "axios";
 import { useStore } from "vuex";
 import { useRoute } from 'vue-router'
 import { ElMessage, ElMessageBox } from "element-plus";
-import md5 from "js-md5";
 
 const store = useStore()
 const route = useRoute()
@@ -28,10 +27,6 @@ onBeforeMount(() =>
     showDialog()
     translate()
   }
-})
-
-onMounted(() =>
-{
   getWords()
 })
 

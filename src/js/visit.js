@@ -40,10 +40,10 @@ class VISIT {
           device.osVersion = "Android " + osInfo[1];
           device.platForm = "Tablet";
         }
-      } else {
-        device.os = "unknown";
-        device.osVersion = "unknown";
-        device.platForm = "unknown";
+      } else if (userAgent.indexOf("linux") !== -1) {
+        device.os = "Linux";
+        device.osVersion = "Linux";
+        device.platForm = "PC";
       }
       return device;
     };

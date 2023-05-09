@@ -38,11 +38,7 @@ const state = reactive({
     <el-col>
       <el-carousel type="card" height="336px">
         <el-carousel-item v-for="item in state.wallpapers" :key="item.title">
-          <el-image
-            :src="item.pic"
-            fit="fill"
-            style="height: 100%; width: 100%"
-          ></el-image>
+          <el-image :src="item.pic" fit="fill" style="height: 100%; width: 100%" lazy></el-image>
           <div class="word">
             <div style="margin-left: 32px">
               <p>{{ item.title }}</p>

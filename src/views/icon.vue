@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, nextTick, onMounted, watch } from "vue";
+import { ref, reactive, nextTick, onBeforeMount, watch } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import axios from "axios";
 import qs from "qs";
@@ -50,17 +50,20 @@ const rules = reactive({
   ],
 });
 
-onMounted(() => {
+onBeforeMount(() =>
+{
   getIcons();
 });
 watch(
   () => filter.value,
-  () => {
+  () =>
+  {
     getIcons();
   },
   { deep: true }
 );
-const getIcons = async () => {
+const getIcons = async () =>
+{
   state.loading = true;
   let res = await axios.get("/ache/icon/get-icon", { params: filter.value });
   iconList.value = res.data;
@@ -74,12 +77,14 @@ const getIcons = async () => {
     }
   }
 };
-const editIcon = (icon) => {
+const editIcon = (icon) =>
+{
   formData.value = icon;
   state.showDialog = true;
   state.mode = "edit";
 };
-const changeColor = () => {
+const changeColor = () =>
+{
   if (formData.value.xml.indexOf("fill") !== -1) {
     let index = formData.value.xml.indexOf("fill") + 6;
     formData.value.xml =
@@ -97,7 +102,8 @@ const changeColor = () => {
       formData.value.xml.substring(index);
   }
 };
-const addIcon = () => {
+const addIcon = () =>
+{
   state.mode = "add";
   formData.value = [
     {
@@ -108,16 +114,19 @@ const addIcon = () => {
     },
   ];
   state.showDialog = true;
-  nextTick(() => {
+  nextTick(() =>
+  {
     form.value.resetFields();
   });
 };
-const deleteIcon = async (id) => {
+const deleteIcon = async (id) =>
+{
   ElMessageBox.confirm("删除不可恢复，确定要删除此图标吗？", "删除提示", {
     distinguishCancelAndClose: true,
     confirmButtonText: "确定",
     cancelButtonText: "取消",
-  }).then(async () => {
+  }).then(async () =>
+  {
     if (store.state.user.info.role === "admin") {
       await axios.delete("/ache/icon/delete-icon", { params: { id: id } });
       ElMessage.success("删除成功！");
@@ -127,7 +136,8 @@ const deleteIcon = async (id) => {
     }
   });
 };
-const handleChange = (file) => {
+const handleChange = (file) =>
+{
   if (file.size / 1024 / 1024 > 1) {
     ElMessage.error("图标大小不能超过1MB!");
     return false;
@@ -135,8 +145,10 @@ const handleChange = (file) => {
   formData.value.xml = URL.createObjectURL(file.raw);
   formData.value.icon = file.name;
 };
-const save = () => {
-  form.value.validate(async (valid, fields) => {
+const save = () =>
+{
+  form.value.validate(async (valid, fields) =>
+  {
     if (valid) {
       if (state.mode === "add") {
         await upload.value.submit();
@@ -154,7 +166,8 @@ const save = () => {
     }
   });
 };
-const onSuccess = (response) => {
+const onSuccess = (response) =>
+{
   if (!response) {
     ElMessage.error("图标编码重复！");
   } else {
@@ -162,7 +175,8 @@ const onSuccess = (response) => {
     getIcons();
   }
 };
-const copy = (code) => {
+const copy = (code) =>
+{
   let content = '<ICON code="' + code + '" />';
   const input = document.createElement("input");
   input.value = content;
@@ -228,67 +242,36 @@ const copy = (code) => {
     </div>
   </div>
 
-  <el-dialog
-    v-model="state.showDialog"
-    :custom-class="`my-dialog ${smallScreen ? 'general' : 'icon'}`"
-  >
+  <el-dialog v-model="state.showDialog" :custom-class="`my-dialog ${smallScreen ? 'general' : 'icon'}`">
     <template #title>
       <ICON :code="state.mode" />
       <span>{{ state.mode === "add" ? "添加" : "编辑" }}图标</span>
     </template>
     <el-form :model="formData" ref="form" :label-width="52" :rules="rules">
       <el-form-item label="名称" prop="name">
-        <el-input
-          v-model="formData.name"
-          maxlength="50"
-          show-word-limit
-        ></el-input>
+        <el-input v-model="formData.name" maxlength="50" show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="编码" prop="code">
-        <el-input
-          v-model="formData.code"
-          maxlength="50"
-          show-word-limit
-        ></el-input>
+        <el-input v-model="formData.code" maxlength="50" show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="图标" prop="icon" v-if="state.mode === 'add'">
-        <el-upload
-          ref="upload"
-          action="/ache/icon/add-icon"
-          accept=".svg"
-          :auto-upload="false"
-          :show-file-list="false"
-          :data="{ name: formData.name, code: formData.code }"
-          :on-change="handleChange"
-          :on-success="onSuccess"
-        >
+        <el-upload ref="upload" action="/ache/icon/add-icon" accept=".svg" :auto-upload="false" :show-file-list="false"
+          :data="{ name: formData.name, code: formData.code }" :on-change="handleChange" :on-success="onSuccess">
           <img v-if="formData.xml" :src="formData.xml" />
           <ICON v-else code="add" :size="148" color="#888" />
         </el-upload>
       </el-form-item>
       <el-form-item label="色彩" prop="color" v-if="state.mode === 'edit'">
-        <el-color-picker
-          @change="changeColor"
-          v-model="formData.color"
-        ></el-color-picker>
+        <el-color-picker @change="changeColor" v-model="formData.color"></el-color-picker>
       </el-form-item>
       <el-form-item label="svg" prop="xml" v-if="state.mode === 'edit'">
         <el-input type="textarea" :rows="8" v-model="formData.xml"></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
-      <el-button
-        :disabled="store.state.user.info.role !== 'admin'"
-        plain
-        @click="state.showDialog = false"
-        >取消
+      <el-button :disabled="store.state.user.info.role !== 'admin'" plain @click="state.showDialog = false">取消
       </el-button>
-      <el-button
-        :disabled="store.state.user.info.role !== 'admin'"
-        type="primary"
-        @click="save"
-        >确定</el-button
-      >
+      <el-button :disabled="store.state.user.info.role !== 'admin'" type="primary" @click="save">确定</el-button>
     </template>
   </el-dialog>
 </template>
@@ -425,7 +408,7 @@ const copy = (code) => {
           }
         }
 
-        i + i {
+        i+i {
           margin-left: 12px;
         }
       }

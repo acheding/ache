@@ -36,19 +36,23 @@ const rules = reactive({
 
 watch(
   () => route.matched,
-  (newValue, oldValue) => {
+  (newValue, oldValue) =>
+  {
     activeIndex.value = newValue[newValue.length - 1].path;
     document.title = "Ache | " + newValue[newValue.length - 1].name;
   }
 );
-onMounted(() => {
+onMounted(() =>
+{
   window.addEventListener("scroll", watchScroll, true);
   insertVisit();
 });
-onBeforeUnmount(() => {
+onBeforeUnmount(() =>
+{
   window.removeEventListener("scroll", watchScroll, true);
 });
-const insertVisit = async () => {
+const insertVisit = async () =>
+{
   const info = await visit.getVisitInfo();
   params.value.time = info[0];
   params.value.os = info[1];
@@ -57,7 +61,8 @@ const insertVisit = async () => {
   params.value.timestamp = info[4];
   await axios.post("/ache/visit/insert-visitor", params.value);
 };
-const watchScroll = () => {
+const watchScroll = () =>
+{
   let scrollTop =
     window.pageYOffset ||
     document.documentElement.scrollTop ||
@@ -69,7 +74,8 @@ const watchScroll = () => {
     isFixed.value = false;
   }
 };
-const jump = (address) => {
+const jump = (address) =>
+{
   if (address === "gitee") {
     window.open("https://gitee.com/fadeache");
   } else {
@@ -77,14 +83,18 @@ const jump = (address) => {
   }
 };
 
-const resetForm = () => {
+const resetForm = () =>
+{
   form.value.resetFields();
   formKey.value++;
 };
-const submitForm = () => {
-  form.value.validate((valid, fields) => {
+const submitForm = () =>
+{
+  form.value.validate((valid, fields) =>
+  {
     if (valid) {
-      store.dispatch("user/login", formInfo.value).then((rst) => {
+      store.dispatch("user/login", formInfo.value).then((rst) =>
+      {
         if (rst) {
           ElMessage({
             type: "success",
@@ -105,8 +115,10 @@ const submitForm = () => {
     }
   });
 };
-const exit = () => {
-  store.dispatch("user/exit", store.state.user.info).then((rst) => {
+const exit = () =>
+{
+  store.dispatch("user/exit", store.state.user.info).then((rst) =>
+  {
     ElMessage({
       type: "info",
       message: rst,
@@ -117,15 +129,18 @@ const exit = () => {
   });
   showDialog.value = false;
 };
-const register = () => {
-  form.value.validate(async (valid, fields) => {
+const register = () =>
+{
+  form.value.validate(async (valid, fields) =>
+  {
     if (valid) {
       let info = formInfo.value.user.split("?");
       ElMessageBox.confirm("确定要注册<" + info[0] + ">用户吗？", "注册提示", {
         distinguishCancelAndClose: true,
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-      }).then(async () => {
+      }).then(async () =>
+      {
         let res = await axios.post("/ache/user/add-user", {
           user: info[0],
           pwd: md5(md5(formInfo.value.pwd) + md5(md5("1424834523"))),

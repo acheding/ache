@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive, ref } from "vue";
+import { reactive, ref } from "vue";
 import axios from "axios";
 import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
@@ -26,7 +26,7 @@ const apis = ref([
     abstract: "学学土味烧话。",
   },
   {
-    icon: "tea",
+    icon: "green",
     name: "green tea words generator",
     api: "other/green",
     abstract: "原来这就是绿茶。",
@@ -76,7 +76,8 @@ const apis = ref([
   },
 ]);
 
-const getWords = async (item) => {
+const getWords = async (item) =>
+{
   state.dialogData = item;
   state.result = '';
   if (item.icon !== "hdpic") {
@@ -86,7 +87,8 @@ const getWords = async (item) => {
     state.showDialog = true;
   }
 };
-const detail = async (item, evt) => {
+const detail = async (item, evt) =>
+{
   if (evt) {
     let target = evt.target; // 取消聚焦
     if (target.nodeName == "SPAN") {
@@ -98,7 +100,7 @@ const detail = async (item, evt) => {
   if (item.icon === "trash") {
     let res = await axios.get(item.api);
     state.result = res.data.returnObj[0];
-  } else if (item.icon === "tea") {
+  } else if (item.icon === "green") {
     let res = await axios.get(item.api);
     state.result = res.data.returnObj.content;
   } else if (
@@ -126,7 +128,8 @@ const detail = async (item, evt) => {
   }
 };
 
-const copy = () => {
+const copy = () =>
+{
   let content = state.result;
   const input = document.createElement("input");
   input.value = content;
@@ -141,7 +144,8 @@ const copy = () => {
     grouping: true,
   });
 };
-const jump = () => {
+const jump = () =>
+{
   router.push({ name: 'main', params: { word: state.result } })
 }
 </script>
@@ -150,7 +154,7 @@ const jump = () => {
   <div class="cards" :class="{ smallScreen: smallScreen }">
     <div v-for="item in apis" :key="item.api" class="card" @click="getWords(item)">
       <div class="portrait">
-        <img :src="`https://zhang.beer:9999/ache/beer/word/${item.icon}.png`" />
+        <img :src="`https://zhang.beer:9999/ache/beer/word/${item.icon}.svg`" />
       </div>
       <div class="content">
         <div>
@@ -165,7 +169,7 @@ const jump = () => {
     :custom-class="`my-dialog ${smallScreen ? 'smallNormal' : state.dialogData.icon === 'hdpic' ? 'normal' : 'small'}`">
     <template #title>
       <div class="title">
-        <img :src="`https://zhang.beer:9999/ache/beer/word/${state.dialogData.icon}.png`" />
+        <img :src="`https://zhang.beer:9999/ache/beer/word/${state.dialogData.icon}.svg`" />
         <span>{{ state.dialogData.name }}</span>
         <el-tooltip v-if="state.dialogData.icon !== 'hdpic'" content="点击句子可复制到剪切板，点击添加可跳转到首页添加此句子。" placement="top-start"
           effect="light">
@@ -180,7 +184,6 @@ const jump = () => {
       <el-radio v-model="state.radio" label="m">1080*1920</el-radio>
       <h3>高清壁纸</h3>
       <el-radio v-model="state.radio" label="api/api">二次元</el-radio>
-      <el-radio v-model="state.radio" label="mcapi/mcapi">menhear酱</el-radio>
       <el-radio v-model="state.radio" label="gqapi/gqapi">风景壁纸 </el-radio>
     </div>
     <div v-else>
