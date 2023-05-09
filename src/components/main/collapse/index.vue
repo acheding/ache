@@ -21,7 +21,8 @@ const state = reactive({
 });
 
 
-onBeforeMount(() => {
+onBeforeMount(() =>
+{
   if (route.params.word) {
     formInfo.value.zhcn = route.params.word
     showDialog()
@@ -29,23 +30,27 @@ onBeforeMount(() => {
   }
 })
 
-onMounted(() => {
+onMounted(() =>
+{
   getWords()
 })
 
 const words = ref([])
-const getWords = async () => {
+const getWords = async () =>
+{
   let res = await axios.get('ache/words/get-words')
   words.value = res.data
   state.activeId = res.data[0].id
 }
 
-const deleteWord = async (id) => {
+const deleteWord = async (id) =>
+{
   ElMessageBox.confirm("确定要删除这句话吗？", "删除提示", {
     distinguishCancelAndClose: true,
     confirmButtonText: "确定",
     cancelButtonText: "取消",
-  }).then(async () => {
+  }).then(async () =>
+  {
     await axios.delete("/ache/words/delete-word", { params: { id: parseInt(id) } });
     getWords()
   });
@@ -136,8 +141,10 @@ const rules = reactive({
 
 const form = ref(null)
 
-const addWord = () => {
-  form.value.validate(async (valid, fields) => {
+const addWord = () =>
+{
+  form.value.validate(async (valid, fields) =>
+  {
     if (valid) {
       await axios.post("/ache/words/add-word", formInfo.value);
       ElMessage({
@@ -149,24 +156,24 @@ const addWord = () => {
   });
 }
 
-const showDialog = () => {
+const showDialog = () =>
+{
   state.showDialog = true
-  nextTick(() => {
+  nextTick(() =>
+  {
     form.value.resetFields()
   })
 }
 
-const translate = async () => {
+const translate = async () =>
+{
   let transData = {
     q: formInfo.value.zhcn,
     from: 'auto',
     to: formInfo.value.lang,
-    appid: '20220807001297216',
-    salt: Date.now(),
-    sign: md5('20220807001297216' + formInfo.value.zhcn + Date.now() + 'RKyiNw8Sh2o831RiXv9E'),
   }
   state.loading = true
-  let res = await axios.get('other/translate', { params: transData })
+  let res = await axios.get('/ache/translate', { params: transData })
   state.loading = false
   formInfo.value.enus = res.data.trans_result[0].dst
 }
@@ -195,7 +202,7 @@ const translate = async () => {
     <el-form :model="formInfo" ref="form" :rules="rules" :label-width="52">
       <el-form-item label="句子" prop="zhcn">
         <el-input type="textarea" :rows="3" placeholder="请输入句子" v-model="formInfo.zhcn" clearable
-          v-on:keyup.enter="addWord"></el-input>
+          v-on:keyup.enter="translate"></el-input>
       </el-form-item>
       <el-form-item label="语言" prop="lang">
         <el-select v-model="formInfo.lang" placeholder="请选择翻译语言" filterable>
