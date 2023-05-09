@@ -21,7 +21,7 @@ const state = reactive({
         "另外几个网站：",
         "博客，一个由VuePress搭建的文档网站，分享自己的收获、经验，也是一段时间的总结。",
         "https://zhang.beer/vuepress",
-        "日记本，一个可以记录日常的网站，有上传图片，评论，回复等功能。与此网站账号、数据互通",
+        "日记本，一个可以记录日常的网站，有上传图片，评论，回复等功能。与此网站账号、数据互通。",
         "https://zhang.beer/diary",
         "今天中午吃什么，搬运自github上的一个开源项目，解决吃什么的世纪难题。",
         "https://zhang.beer/eat"
@@ -68,7 +68,7 @@ const jump = (url) => {
             <div style="margin-left: 32px">
               <p>{{ item.title }}</p>
               <p v-for="(section, j) in item.content">
-                <span v-if="i === 0 && [4, 6, 8].includes(j)" class="gm" @click="jump(section)">{{ section
+                <span v-if="i === 0 && [6, 8, 10].includes(j)" class="gm" @click="jump(section)">{{ section
                 }}</span>
                 <span v-else>{{ section }}</span>
               </p>
@@ -117,11 +117,13 @@ const jump = (url) => {
   .word {
     position: absolute;
     left: 6%;
-    bottom: 24px;
+    top: 24px;
     text-align: left;
     // color: #ffffff;
     color: #524c4c;
     width: 88%;
+    height: calc(100% - 48px);
+    overflow: auto;
 
     p {
       margin: 0;
