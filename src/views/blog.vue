@@ -19,27 +19,23 @@ const filter = ref({
   search: "",
 });
 
-onBeforeMount(() =>
-{
+onBeforeMount(() => {
   getBlog();
 });
 
 watch(
   () => filter.value.search,
-  () =>
-  {
+  () => {
     getBlog();
   }
 );
 
-const jump = (type, url) =>
-{
+const jump = (type, url) => {
   let suffix = url ? '/' + url + '.html' : ''
   window.open("https://zhang.beer/vuepress/blog/" + type + suffix);
 };
 
-const getBlog = async (index, type, sort) =>
-{
+const getBlog = async (index, type, sort) => {
   if (type) {
     if (type === "all") filter.value.type = "";
     else filter.value.type = type;
@@ -58,8 +54,7 @@ const getBlog = async (index, type, sort) =>
   blogs.value = res.data;
 };
 
-const highLight = (allText, keyword) =>
-{
+const highLight = (allText, keyword) => {
   // let specialCharacter = ["\\", "(", ")", "_", "*", "+", ".", "[", "]", "?"];
   // specialCharacter.map((v) => {
   //   let qwq = new RegExp("\\" + v, "gim");
@@ -81,8 +76,7 @@ const highLight = (allText, keyword) =>
   } else return allText;
 };
 
-const getColor = (color) =>
-{
+const getColor = (color) => {
   if (color) return color
   else return '#' + Math.floor((Math.random() * 255)).toString(16) +
     Math.floor((Math.random() * 255)).toString(16) +
@@ -185,6 +179,7 @@ const getColor = (color) =>
     h3 {
       display: inline-block;
       margin-bottom: 0;
+      cursor: pointer;
 
       &:hover {
         color: #409eff;
