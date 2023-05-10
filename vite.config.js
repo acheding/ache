@@ -1,8 +1,8 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import path from "path";
+// import externalGlobals from "rollup-plugin-external-globals";
 
-// https://vitejs.dev/config/
 export default defineConfig({
   resolve: {
     alias: {
@@ -12,7 +12,7 @@ export default defineConfig({
   plugins: [vue()],
   server: {
     port: 3333, // 打开的端口号
-    open: true, // 运行时打开浏览器
+    open: false, // 运行时打开浏览器
     proxy: {
       "/ache": {
         target: "https://zhang.beer/",
@@ -39,6 +39,28 @@ export default defineConfig({
       },
     },
     rollupOptions: {
+      // 以下文件不打包
+      // external: [
+      //   "vue",
+      //   "element-plus",
+      //   "@element-plus/icons-vue",
+      //   // "vuex",
+      //   // "axios",
+      //   // "vue-router",
+      //   // "echarts",
+      // ],
+      // plugins: [
+      //   // 打包时自动将代码中的引入替换成cdn引入
+      //   externalGlobals({
+      //     vue: "Vue",
+      //     "element-plus": "ElementPlus",
+      //     "@element-plus/icons-vue": "ElementPlusIconsVue",
+      //     vuex: "Vuex",
+      //     axios: "axios",
+      //     "vue-router": "VueRouter",
+      //     echarts: "echarts",
+      //   }),
+      // ],
       output: {
         manualChunks(id) {
           if (id.includes("node_modules")) {
