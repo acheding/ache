@@ -22,12 +22,12 @@ const state = reactive({
 
 onBeforeMount(() =>
 {
+  getWords()
   if (route.params.word) {
     formInfo.value.zhcn = route.params.word
     showDialog()
     translate()
   }
-  getWords()
 })
 
 const words = ref([])
@@ -36,6 +36,7 @@ const getWords = async () =>
   let res = await axios.get('ache/words/get-words')
   words.value = res.data
   state.activeId = res.data[0].id
+  console.log(words.value);
 }
 
 const deleteWord = async (id) =>
@@ -189,8 +190,8 @@ const translate = async () =>
     <ICON code="plus" />
   </div>
 
-  <el-dialog v-model="state.showDialog" :custom-class="`my-dialog ${smallScreen ? 'general' : 'icon'}`">
-    <template #title>
+  <el-dialog v-model="state.showDialog" :class="`my-dialog ${smallScreen ? 'general' : 'icon'}`">
+    <template #header>
       <ICON code="plus" />
       添加句子
     </template>

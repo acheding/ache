@@ -26,7 +26,7 @@ const state = reactive({
         "今天中午吃什么，搬运自github上的一个开源项目，解决吃什么的世纪难题。",
         "https://zhang.beer/eat"
       ],
-      pic: "one.svg",
+      pic: "https://zhang.beer:9999/ache/beer/main/one.svg",
     },
     {
       title: "功能简介",
@@ -38,7 +38,7 @@ const state = reactive({
         "图标中心支持图标的增删改查和组件代码复制，图标采用后端接口调用图标，数据库存储图标，前端图标组件化复用等方式，统一管理，极大提升了开发与维护效率，节约时间成本，为图标的使用提供了新的解题思路。网站图标均从数据库调用。",
         "关于页显示所有访客浏览记录，同一设备同一浏览器10分钟之内仅记录一次,并根据时间段和设备类型作出图表统计。"
       ],
-      pic: "two.svg",
+      pic: "https://zhang.beer:9999/ache/beer/main/two.svg",
     },
   ],
 });
@@ -147,7 +147,7 @@ const jump = (url) =>
     width: 4px;
     height: 80%;
     // background: #ffffff;
-    background: #524c4c;
+    background: #42b983;
     opacity: 0.44;
     top: 10%;
   }

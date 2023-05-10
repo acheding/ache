@@ -148,7 +148,7 @@ const tip = ref('①未登录只能创建公共访客事件，登录之后才可
     @click="state.showOperation = !state.showOperation">
     隐藏操作
   </div>
-  <el-calendar v-model="state.value"><template #dateCell="{ data }">
+  <el-calendar v-model="state.value"><template #date-cell="{ data }">
       <el-popover placement="top-start" trigger="click" v-if="getSchedules(data).length" width="auto">
         <li v-for="item in getSchedules(data)">
           <span style="cursor: pointer" :style="[
@@ -166,8 +166,7 @@ const tip = ref('①未登录只能创建公共访客事件，登录之后才可
           ]" @click="exchange(item)">{{ item.event }}</span><span class="gm" style="float: right"
             v-show="state.showOperation" @click="deleteSchedule(item.id)">delete</span><span class="gm"
             style="margin: 0 8px; float: right" v-show="state.showOperation"
-            @click="displayDialog('编辑日程', 'edit', item)">edit</span><span v-if="item.completed"
-            style="margin-left: 8px">
+            @click="displayDialog('编辑日程', 'edit', item)">edit</span><span v-if="item.completed" style="margin-left: 8px">
             —{{ item.completed }}%</span>
         </li>
         <template #reference>
@@ -181,8 +180,8 @@ const tip = ref('①未登录只能创建公共访客事件，登录之后才可
       </div>
     </template></el-calendar>
 
-  <el-dialog v-model="state.showDialog" custom-class="my-dialog general">
-    <template #title>
+  <el-dialog v-model="state.showDialog" class="my-dialog general">
+    <template #header>
       <span>{{ state.dialogTitle }}</span>
     </template>
     <el-form :model="aSchedule" ref="form" :rules="rules" :key="formKey" :label-width="52">

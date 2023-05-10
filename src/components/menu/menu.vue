@@ -173,7 +173,7 @@ const register = () =>
       <template v-for="item in menu">
         <template v-if="item.children?.length">
           <el-sub-menu :key="item.name" :index="item.router">
-            <template #title>
+            <template #header>
               <ICON :code="item.icon" />
               <span class="title">{{ item.title }}</span>
             </template>
@@ -211,8 +211,8 @@ const register = () =>
       </div>
     </div>
   </div>
-  <el-dialog v-model="showDialog" custom-class="my-dialog login">
-    <template #title>
+  <el-dialog v-model="showDialog" class="my-dialog login">
+    <template #header>
       <img src="https://zhang.beer:9999/ache/beer/menu/login.svg"
         style="height: 20px; width: 40px; vertical-align: -16%" />
     </template>
