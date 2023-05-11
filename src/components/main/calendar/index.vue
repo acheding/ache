@@ -18,33 +18,27 @@ const state = reactive({
 const form = ref(null);
 const formKey = ref(0);
 
-onMounted(() =>
-{
+onMounted(() => {
   updateSchedules();
 });
 
 watch(
   () => store.state.user.info,
-  () =>
-  {
+  () => {
     updateSchedules();
     state.exchangeArr = [];
   }
 );
 
-const updateSchedules = async () =>
-{
+const updateSchedules = async () => {
   let res = await axios.get("/ache/calendar/get-calendar");
   state.schedules = res.data;
 };
 
-const getSchedules = computed(() =>
-{
-  return function (data)
-  {
+const getSchedules = computed(() => {
+  return function (data) {
     let theDay = [];
-    state.schedules.find((item) =>
-    {
+    state.schedules.find((item) => {
       if (item.date === data.day) {
         theDay.push(item);
       }
@@ -53,10 +47,8 @@ const getSchedules = computed(() =>
   };
 });
 
-const operateSchedule = (mode) =>
-{
-  form.value.validate(async (valid, fields) =>
-  {
+const operateSchedule = (mode) => {
+  form.value.validate(async (valid, fields) => {
     if (valid) {
       mode === "add"
         ? await axios.post("/ache/calendar/add-calendar", aSchedule.value)
@@ -71,14 +63,12 @@ const aSchedule = ref({
   event: "",
   completed: 0,
 });
-const deleteSchedule = async (id) =>
-{
+const deleteSchedule = async (id) => {
   await axios.delete("/ache/calendar/delete-calendar", { params: { id: parseInt(id) } });
   updateSchedules();
 };
 
-const displayDialog = (title, mode, data) =>
-{
+const displayDialog = (title, mode, data) => {
   state.dialogTitle = title;
   state.dialogMode = mode;
   if (mode === "add") {
@@ -87,8 +77,7 @@ const displayDialog = (title, mode, data) =>
       event: "",
       completed: 0,
     };
-    nextTick(() =>
-    {
+    nextTick(() => {
       if (form.value) {
         form.value.resetFields();
       }
@@ -107,8 +96,7 @@ const rules = reactive({
   ],
 });
 
-const exchange = async (item) =>
-{
+const exchange = async (item) => {
   state.exchangeArr.push(item.id);
   if (state.exchangeArr.length === 1) {
     ElMessage({
@@ -180,7 +168,7 @@ const tip = ref('①未登录只能创建公共访客事件，登录之后才可
       </div>
     </template></el-calendar>
 
-  <el-dialog v-model="state.showDialog" class="my-dialog general">
+  <el-dialog v-model="state.showDialog" custom-class="my-dialog general">
     <template #header>
       <span>{{ state.dialogTitle }}</span>
     </template>

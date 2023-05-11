@@ -40,16 +40,19 @@ const scrollTop = ref(0);
 
 watch(
   () => route.matched,
-  (newValue, oldValue) =>
-  {
-    activeIndex.value = newValue[newValue.length - 1].path;
-    document.title = "Ache | " + newValue[newValue.length - 1].name;
+  (newValue, oldValue) => {
+    if (newValue?.[0]?.meta?.view) {
+      activeIndex.value = newValue[newValue.length - 1].path;
+      document.title = "Ache | " + newValue[newValue.length - 1].name;
+    }
+    else {
+      document.title = "Ache | 404";
+    }
   }
 );
 watch(
   () => scrollTop.value,
-  (newValue, oldValue) =>
-  {
+  (newValue, oldValue) => {
     if (newValue > 24) {
       sunFixed.value = true;
     } else {
@@ -75,17 +78,14 @@ watch(
   }
 );
 
-onMounted(() =>
-{
+onMounted(() => {
   window.addEventListener("scroll", watchScroll, true);
   insertVisit();
 });
-onBeforeUnmount(() =>
-{
+onBeforeUnmount(() => {
   window.removeEventListener("scroll", watchScroll, true);
 });
-const insertVisit = async () =>
-{
+const insertVisit = async () => {
   const info = await visit.getVisitInfo();
   params.value.time = info[0];
   params.value.os = info[1];
@@ -94,26 +94,21 @@ const insertVisit = async () =>
   params.value.timestamp = info[4];
   await axios.post("/ache/visit/insert-visitor", params.value);
 };
-const watchScroll = () =>
-{
+const watchScroll = () => {
   scrollTop.value =
     window.pageYOffset ||
     document.documentElement.scrollTop ||
     document.body.scrollTop;
 };
 
-const resetForm = () =>
-{
+const resetForm = () => {
   form.value.resetFields();
   formKey.value++;
 };
-const submitForm = () =>
-{
-  form.value.validate((valid, fields) =>
-  {
+const submitForm = () => {
+  form.value.validate((valid, fields) => {
     if (valid) {
-      store.dispatch("user/login", formInfo.value).then((rst) =>
-      {
+      store.dispatch("user/login", formInfo.value).then((rst) => {
         if (rst) {
           ElMessage({
             type: "success",
@@ -134,10 +129,8 @@ const submitForm = () =>
     }
   });
 };
-const exit = () =>
-{
-  store.dispatch("user/exit", store.state.user.info).then((rst) =>
-  {
+const exit = () => {
+  store.dispatch("user/exit", store.state.user.info).then((rst) => {
     ElMessage({
       type: "info",
       message: rst,
@@ -148,18 +141,15 @@ const exit = () =>
   });
   showDialog.value = false;
 };
-const register = () =>
-{
-  form.value.validate(async (valid, fields) =>
-  {
+const register = () => {
+  form.value.validate(async (valid, fields) => {
     if (valid) {
       let info = formInfo.value.user.split("?");
       ElMessageBox.confirm("确定要注册<" + info[0] + ">用户吗？", "注册提示", {
         distinguishCancelAndClose: true,
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-      }).then(async () =>
-      {
+      }).then(async () => {
         let res = await axios.post("/ache/user/add-user", {
           user: info[0],
           pwd: md5(md5(formInfo.value.pwd) + md5(md5("1424834523"))),
@@ -231,7 +221,7 @@ const register = () =>
     </div>
   </el-drawer>
 
-  <el-dialog v-model="showDialog" class="my-dialog smallLogin">
+  <el-dialog v-model="showDialog" custom-class="my-dialog smallLogin">
     <template #header>
       <img src="https://zhang.beer:9999/ache/beer/menu/login.svg"
         style="height: 20px; width: 40px; vertical-align: -16%" />

@@ -20,8 +20,7 @@ const state = reactive({
 });
 
 
-onBeforeMount(() =>
-{
+onBeforeMount(() => {
   getWords()
   if (route.params.word) {
     formInfo.value.zhcn = route.params.word
@@ -31,22 +30,19 @@ onBeforeMount(() =>
 })
 
 const words = ref([])
-const getWords = async () =>
-{
+const getWords = async () => {
   let res = await axios.get('ache/words/get-words')
   words.value = res.data
   state.activeId = res.data[0].id
   console.log(words.value);
 }
 
-const deleteWord = async (id) =>
-{
+const deleteWord = async (id) => {
   ElMessageBox.confirm("确定要删除这句话吗？", "删除提示", {
     distinguishCancelAndClose: true,
     confirmButtonText: "确定",
     cancelButtonText: "取消",
-  }).then(async () =>
-  {
+  }).then(async () => {
     await axios.delete("/ache/words/delete-word", { params: { id: parseInt(id) } });
     getWords()
   });
@@ -137,10 +133,8 @@ const rules = reactive({
 
 const form = ref(null)
 
-const addWord = () =>
-{
-  form.value.validate(async (valid, fields) =>
-  {
+const addWord = () => {
+  form.value.validate(async (valid, fields) => {
     if (valid) {
       await axios.post("/ache/words/add-word", formInfo.value);
       ElMessage({
@@ -152,17 +146,14 @@ const addWord = () =>
   });
 }
 
-const showDialog = () =>
-{
+const showDialog = () => {
   state.showDialog = true
-  nextTick(() =>
-  {
+  nextTick(() => {
     form.value.resetFields()
   })
 }
 
-const translate = async () =>
-{
+const translate = async () => {
   let transData = {
     q: formInfo.value.zhcn,
     from: 'auto',
@@ -190,7 +181,7 @@ const translate = async () =>
     <ICON code="plus" />
   </div>
 
-  <el-dialog v-model="state.showDialog" :class="`my-dialog ${smallScreen ? 'general' : 'icon'}`">
+  <el-dialog v-model="state.showDialog" :custom-class="`my-dialog ${smallScreen ? 'general' : 'icon'}`">
     <template #header>
       <ICON code="plus" />
       添加句子

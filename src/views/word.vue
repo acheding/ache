@@ -76,8 +76,7 @@ const apis = ref([
   },
 ]);
 
-const getWords = async (item) =>
-{
+const getWords = async (item) => {
   state.dialogData = item;
   state.result = '';
   if (item.icon !== "hdpic") {
@@ -87,8 +86,7 @@ const getWords = async (item) =>
     state.showDialog = true;
   }
 };
-const detail = async (item, evt) =>
-{
+const detail = async (item, evt) => {
   if (evt) {
     let target = evt.target; // 取消聚焦
     if (target.nodeName == "SPAN") {
@@ -128,8 +126,7 @@ const detail = async (item, evt) =>
   }
 };
 
-const copy = () =>
-{
+const copy = () => {
   let content = state.result;
   const input = document.createElement("input");
   input.value = content;
@@ -144,8 +141,7 @@ const copy = () =>
     grouping: true,
   });
 };
-const jump = () =>
-{
+const jump = () => {
   router.push({ name: 'main', params: { word: state.result } })
 }
 </script>
@@ -166,7 +162,7 @@ const jump = () =>
   </div>
 
   <el-dialog v-model="state.showDialog" v-if="state.showDialog"
-    :class="`my-dialog ${smallScreen ? 'smallNormal' : state.dialogData.icon === 'hdpic' ? 'normal' : 'small'}`">
+    :custom-class="`my-dialog ${smallScreen ? 'smallNormal' : state.dialogData.icon === 'hdpic' ? 'normal' : 'small'}`">
     <template #header>
       <div class="title">
         <img :src="`https://zhang.beer:9999/ache/beer/word/${state.dialogData.icon}.svg`" />
