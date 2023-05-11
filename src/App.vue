@@ -2,11 +2,9 @@
 import Menu from "./components/menu/menu.vue";
 import Small from "./components/menu/small.vue";
 import Page404 from '@/views/404.vue'
-import { defineAsyncComponent, shallowRef, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { onBeforeUnmount, ref, onBeforeMount } from "vue";
-
 const route = useRoute();
 const store = useStore();
 
@@ -18,37 +16,7 @@ onBeforeMount(() => {
 onBeforeUnmount(() => {
   window.removeEventListener("resize", renderResize);
 });
-
 const smallScreen = ref(false);
-let Component = shallowRef('')
-let modules = import.meta.glob('/src/views/*.vue')
-const getViews = (path) => {
-  return modules['/src/views/' + path + '.vue']
-}
-
-watch(
-  () => route.matched,
-  (newValue, oldValue) => {
-    if (newValue?.[0]?.meta?.view) {
-      if (newValue?.[0]?.meta?.view !== oldValue?.[0]?.meta?.view) {
-        if (getViews(newValue[0].meta.view)) {
-          Component.value = defineAsyncComponent({
-            loader: getViews(newValue[0].meta.view),
-          })
-        } else {
-          Component.value = Page404
-        }
-      }
-    }
-    else {
-      Component.value = Page404
-    }
-  },
-  {
-    immediate: true,
-  }
-)
-
 const renderResize = () => {
   let width = document.documentElement.clientWidth;
   if (width < 1229) {
@@ -69,8 +37,8 @@ const jump = () => window.open('https://beian.miit.gov.cn/')
     </el-aside>
     <el-main>
       <Small v-if="smallScreen"></Small>
-      <!-- <router-view :smallScreen="smallScreen"></router-view> -->
-      <component v-if="Component" :is="Component" :smallScreen="smallScreen"></component>
+      <router-view v-if="route.matched[0]?.path" :smallScreen="smallScreen"></router-view>
+      <Page404 v-else></Page404>
     </el-main>
   </el-container>
   <div v-if="!smallScreen" class="record" @click="jump">

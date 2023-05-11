@@ -42,8 +42,7 @@ const state = reactive({
     },
   ],
 });
-const jump = (url) =>
-{
+const jump = (url) => {
   window.open(url)
 }
 </script>
@@ -64,7 +63,7 @@ const jump = (url) =>
       </el-carousel> -->
       <el-carousel height="360px" direction="vertical" :interval="8000">
         <el-carousel-item v-for="(item, i) in state.wallpapers" :key="item.title">
-          <el-image :src="item.pic" fit="fill" style="height: 100%; width: 100%"></el-image>
+          <!-- <el-image :src="item.pic" fit="fill" style="height: 100%; width: 100%"></el-image> -->
           <div class="word">
             <div style="margin-left: 32px">
               <p>{{ item.title }}</p>

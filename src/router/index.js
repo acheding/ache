@@ -6,10 +6,7 @@ const getRoute = (menu, parentPath) => {
     return {
       path,
       name: item.name,
-      meta: {
-        view: item.view,
-      },
-      component: [],
+      component: () => import(`../views/${item.view}.vue`),
       children: getRoute(item.children, path),
     };
   });

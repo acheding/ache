@@ -41,7 +41,7 @@ const scrollTop = ref(0);
 watch(
   () => route.matched,
   (newValue, oldValue) => {
-    if (newValue?.[0]?.meta?.view) {
+    if (newValue?.[0]?.path) {
       activeIndex.value = newValue[newValue.length - 1].path;
       document.title = "Ache | " + newValue[newValue.length - 1].name;
     }

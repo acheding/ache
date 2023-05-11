@@ -118,25 +118,23 @@ const exchange = async (item) => {
     state.exchangeArr = [];
   }
 };
-
-const tip = ref('①未登录只能创建公共访客事件，登录之后才可创建账号的单独日程。②点击两个事件可交换顺序，但只可交换当天事件。③点击隐藏按钮可隐藏操作按钮，再次点击此位置可重新显示。');
 </script>
 
 <template>
-  <div class="addBtn">
-    <div class="gm" v-if="state.showOperation" @click="displayDialog('添加日程', 'add')">
-      添加日程
-    </div>
-    <el-tooltip :content="tip" placement="top-start" effect="light">
-      <ICON code="about" />
-    </el-tooltip>
+  <div class="btns">
+    <el-popover placement="top" trigger="hover" :width="100">
+      <template #reference>
+        <ICON code="about" />
+      </template>
+      <span>&nbsp;</span>
+      <span class="gm" @click="displayDialog('添加日程', 'add')">
+        添加日程
+      </span>
+      <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      <span class="gm" @click="state.showOperation = !state.showOperation">隐藏操作</span>
+    </el-popover>
   </div>
-
-  <div class="switch gm" :style="[state.showOperation ? 'opacity:1' : '']"
-    @click="state.showOperation = !state.showOperation">
-    隐藏操作
-  </div>
-  <el-calendar v-model="state.value"><template #date-cell="{ data }">
+  <el-calendar v-model="state.value"><template #dateCell="{ data }">
       <el-popover placement="top-start" trigger="click" v-if="getSchedules(data).length" width="auto">
         <li v-for="item in getSchedules(data)">
           <span style="cursor: pointer" :style="[
@@ -230,24 +228,18 @@ const tip = ref('①未登录只能创建公共访客事件，登录之后才可
   }
 }
 
-.addBtn {
+.btns {
   position: absolute;
-  display: flex;
+  margin-top: 34px;
+  right: 34px;
 
   i {
-    margin-left: 5px;
-    margin-top: 2px;
     cursor: pointer;
 
     &:hover {
-      color: orangered;
+      // color: orangered;
+      color: #42b983;
     }
   }
-}
-
-.switch {
-  position: absolute;
-  right: 16px;
-  opacity: 0;
 }
 </style>

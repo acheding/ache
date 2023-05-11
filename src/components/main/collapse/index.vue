@@ -34,7 +34,9 @@ const getWords = async () => {
   let res = await axios.get('ache/words/get-words')
   words.value = res.data
   state.activeId = res.data[0].id
-  console.log(words.value);
+  words.value.forEach(i => {
+    console.log(i.zhcn);
+  })
 }
 
 const deleteWord = async (id) => {
