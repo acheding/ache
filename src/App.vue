@@ -1,7 +1,6 @@
 <script setup>
 import Menu from "./components/menu/menu.vue";
 import Small from "./components/menu/small.vue";
-import Page404 from '@/views/404.vue'
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { onBeforeUnmount, ref, onBeforeMount } from "vue";
@@ -38,7 +37,6 @@ const jump = () => window.open('https://beian.miit.gov.cn/')
     <el-main>
       <Small v-if="smallScreen"></Small>
       <router-view v-if="route.matched[0]?.path" :smallScreen="smallScreen"></router-view>
-      <Page404 v-else></Page404>
     </el-main>
   </el-container>
   <div v-if="!smallScreen" class="record" @click="jump">
