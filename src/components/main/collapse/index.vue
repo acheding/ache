@@ -190,15 +190,15 @@ const translate = async () => {
 </script>
 
 <template>
-  <el-collapse v-model="state.activeName" accordion v-for="(item, index) in words" :key="item" @change="state.activeId = item.id">
-    <el-collapse-item :title="item.zhcn" :name="(index + 1).toString()">
+  <el-collapse v-model="state.activeName" accordion>
+    <el-collapse-item v-for="(item, index) in words" :title="item.zhcn" :name="(index + 1).toString()" @change="state.activeId = item.id">
       <div>{{ item.enus }}</div>
       <div class="minus" v-if="store.state.user.info.role === 'admin' && state.activeId === item.id" @click="deleteWord(item.id)">
         <ICON code="minus" />
       </div>
     </el-collapse-item>
   </el-collapse>
-  <div class="plus gm" @click="showDialog()">
+  <div class="plus" @click="showDialog()">
     <ICON code="plus" />
   </div>
 
@@ -276,12 +276,16 @@ const translate = async () => {
 .minus,
 .plus {
   margin-top: 8px;
+  &:hover {
+    cursor: pointer;
+    color: #42b983;
+  }
 }
 
 .minus {
+  cursor: pointer;
   i:hover {
     color: orangered;
-    cursor: pointer;
   }
 }
 </style>

@@ -3,6 +3,7 @@ import axios from 'axios'
 import { computed, onMounted, reactive, ref, nextTick, watch } from 'vue'
 import { useStore } from 'vuex'
 import { ElMessage } from 'element-plus'
+import time from '@/utils/time'
 
 const store = useStore()
 
@@ -17,6 +18,7 @@ const state = reactive({
 
 const form = ref(null)
 const formKey = ref(0)
+const date = ref(time.format(new Date(), 'yyyy-MM-dd'))
 
 onMounted(() => {
   updateSchedules()
@@ -29,6 +31,10 @@ watch(
     state.exchangeArr = []
   }
 )
+
+const getDate = (data) => {
+  date.value = data.day
+}
 
 const updateSchedules = async () => {
   let res = await axios.get('/ache/calendar/get-calendar')
@@ -73,7 +79,7 @@ const displayDialog = (title, mode, data) => {
   state.dialogMode = mode
   if (mode === 'add') {
     aSchedule.value = {
-      date: '',
+      date: date.value,
       event: '',
       completed: 0,
     }
@@ -120,14 +126,12 @@ const exchange = async (item) => {
 
 <template>
   <div class="btns">
-    <el-popover placement="top" trigger="hover" :width="100">
+    <el-popover placement="top" trigger="hover" :width="160">
       <template #reference>
         <ICON code="about" />
       </template>
-      <span>&nbsp;</span>
-      <span class="gm" @click="displayDialog('添加日程', 'add')"> 添加日程 </span>
-      <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-      <span class="gm" @click="state.showOperation = !state.showOperation">隐藏操作</span>
+      <span class="gm" style="margin-right: 16px" @click="displayDialog('添加日程', 'add')"> 添加日程 </span>
+      <span class="gm" @click="state.showOperation = !state.showOperation">{{ state.showOperation ? '隐藏操作' : '显示操作' }}</span>
     </el-popover>
   </div>
   <el-calendar v-model="state.value"
@@ -161,12 +165,12 @@ const exchange = async (item) => {
           ><span v-if="item.completed" style="margin-left: 8px"> —{{ item.completed }}%</span>
         </li>
         <template #reference>
-          <div class="hasSchedules">
+          <div class="hasSchedules" @click="getDate(data)">
             {{ data.day.split('-').slice(2).join('') }}
           </div>
         </template>
       </el-popover>
-      <div v-else>
+      <div v-else @click="getDate(data)">
         {{ data.day.split('-').slice(2).join('') }}
       </div>
     </template></el-calendar
@@ -233,7 +237,6 @@ const exchange = async (item) => {
         height: 2px;
         background: #409eff;
         margin-top: 36px;
-        // margin-top: 28px;
         margin-left: 0;
       }
     }
@@ -246,10 +249,7 @@ const exchange = async (item) => {
   right: 34px;
 
   i {
-    cursor: pointer;
-
     &:hover {
-      // color: orangered;
       color: #42b983;
     }
   }
