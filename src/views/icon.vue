@@ -1,182 +1,168 @@
 <script setup>
-import { ref, reactive, nextTick, onBeforeMount, watch } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
-import axios from "axios";
-import qs from "qs";
-import { useStore } from "vuex";
+import { ref, reactive, nextTick, onBeforeMount, watch } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import axios from 'axios'
+import qs from 'qs'
+import { useStore } from 'vuex'
 
-const store = useStore();
+const store = useStore()
 
 const state = reactive({
   showDialog: false,
-  mode: "",
+  mode: '',
   loading: false,
-});
+})
 const props = defineProps({
   smallScreen: Boolean,
-});
+})
 const filter = ref({
-  name: "",
-  code: "",
-});
-const iconList = ref([]);
-const form = ref(null);
-const upload = ref(null);
+  name: '',
+  code: '',
+})
+const iconList = ref([])
+const form = ref(null)
+const upload = ref(null)
 const formData = ref({
-  name: "",
-  code: "",
+  name: '',
+  code: '',
   color: null,
-  icon: "",
-  xml: "",
-});
+  icon: '',
+  xml: '',
+})
 
 const rules = reactive({
-  name: [
-    { required: true, message: "名称不能为空", trigger: ["blur", "change"] },
-  ],
+  name: [{ required: true, message: '名称不能为空', trigger: ['blur', 'change'] }],
   code: [
-    { required: true, message: "编码不能为空", trigger: ["blur", "change"] },
+    { required: true, message: '编码不能为空', trigger: ['blur', 'change'] },
     {
       pattern: /[a-zA-Z]/,
-      message: "编码只支持英文",
-      trigger: ["blur", "change"],
+      message: '编码只支持英文',
+      trigger: ['blur', 'change'],
     },
   ],
-  xml: [
-    { required: true, message: "svg不能为空", trigger: ["blur", "change"] },
-  ],
-  icon: [
-    { required: true, message: "图标不能为空", trigger: ["blur", "change"] },
-  ],
-});
+  xml: [{ required: true, message: 'svg不能为空', trigger: ['blur', 'change'] }],
+  icon: [{ required: true, message: '图标不能为空', trigger: ['blur', 'change'] }],
+})
 
 onBeforeMount(() => {
-  getIcons();
-});
+  getIcons()
+})
 watch(
   () => filter.value,
   () => {
-    getIcons();
+    getIcons()
   },
   { deep: true }
-);
+)
 const getIcons = async () => {
-  state.loading = true;
-  let res = await axios.get("/ache/icon/get-icon", { params: filter.value });
-  iconList.value = res.data;
-  state.loading = false;
+  state.loading = true
+  let res = await axios.get('/ache/icon/get-icon', { params: filter.value })
+  iconList.value = res.data
+  state.loading = false
   for (let i in iconList.value) {
-    if (iconList.value[i].xml.indexOf("fill") !== -1) {
-      let color = null;
-      let index = iconList.value[i].xml.indexOf("fill") + 6;
-      color = iconList.value[i].xml.slice(index, index + 7);
-      iconList.value[i].color = color;
+    if (iconList.value[i].xml.indexOf('fill') !== -1) {
+      let color = null
+      let index = iconList.value[i].xml.indexOf('fill') + 6
+      color = iconList.value[i].xml.slice(index, index + 7)
+      iconList.value[i].color = color
     }
   }
-};
+}
 const editIcon = (icon) => {
-  formData.value = icon;
-  state.showDialog = true;
-  state.mode = "edit";
-};
+  formData.value = icon
+  state.showDialog = true
+  state.mode = 'edit'
+}
 const changeColor = () => {
-  if (formData.value.xml.indexOf("fill") !== -1) {
-    let index = formData.value.xml.indexOf("fill") + 6;
-    formData.value.xml =
-      formData.value.xml.substring(0, index) +
-      formData.value.color +
-      '" ' +
-      formData.value.xml.substring(index + 9);
+  if (formData.value.xml.indexOf('fill') !== -1) {
+    let index = formData.value.xml.indexOf('fill') + 6
+    formData.value.xml = formData.value.xml.substring(0, index) + formData.value.color + '" ' + formData.value.xml.substring(index + 9)
   } else {
-    let index = formData.value.xml.indexOf("<svg") + 5;
+    let index = formData.value.xml.indexOf('<svg') + 5
     formData.value.xml =
-      formData.value.xml.substring(0, index) +
-      'fill="' +
-      formData.value.color +
-      '" ' +
-      formData.value.xml.substring(index);
+      formData.value.xml.substring(0, index) + 'fill="' + formData.value.color + '" ' + formData.value.xml.substring(index)
   }
-};
+}
 const addIcon = () => {
-  state.mode = "add";
+  state.mode = 'add'
   formData.value = [
     {
-      name: "",
-      code: "",
-      xml: "",
+      name: '',
+      code: '',
+      xml: '',
     },
-  ];
-  state.showDialog = true;
+  ]
+  state.showDialog = true
   nextTick(() => {
-    form.value.resetFields();
-  });
-};
+    form.value.resetFields()
+  })
+}
 const deleteIcon = async (id) => {
-  ElMessageBox.confirm("删除不可恢复，确定要删除此图标吗？", "删除提示", {
+  ElMessageBox.confirm('删除不可恢复，确定要删除此图标吗？', '删除提示', {
     distinguishCancelAndClose: true,
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
   }).then(async () => {
-    if (store.state.user.info.role === "admin") {
-      await axios.delete("/ache/icon/delete-icon", { params: { id: id } });
-      ElMessage.success("删除成功！");
-      getIcons();
+    if (store.state.user.info.role === 'admin') {
+      await axios.delete('/ache/icon/delete-icon', { params: { id: id } })
+      ElMessage.success('删除成功！')
+      getIcons()
     } else {
-      ElMessage.error("只有管理员才能执行此操作！");
+      ElMessage.error('只有管理员才能执行此操作！')
     }
-  });
-};
+  })
+}
 const handleChange = (file) => {
   if (file.size / 1024 / 1024 > 1) {
-    ElMessage.error("图标大小不能超过1MB!");
-    return false;
+    ElMessage.error('图标大小不能超过1MB!')
+    return false
   }
-  formData.value.xml = URL.createObjectURL(file.raw);
-  formData.value.name = file.name.substring(0, file.name.length - 4);
-  formData.value.icon = file.name;
-};
+  formData.value.xml = URL.createObjectURL(file.raw)
+  formData.value.name = file.name.substring(0, file.name.length - 4)
+  formData.value.icon = file.name
+}
 const save = () => {
   form.value.validate(async (valid, fields) => {
     if (valid) {
-      if (state.mode === "add") {
-        await upload.value.submit();
+      if (state.mode === 'add') {
+        await upload.value.submit()
       } else {
         let params = {
           id: formData.value.id,
           name: formData.value.name,
           code: formData.value.code,
           xml: formData.value.xml,
-        };
-        axios.put("/ache/icon/edit-icon", qs.stringify(params));
-        ElMessage.success("编辑成功！");
+        }
+        axios.put('/ache/icon/edit-icon', qs.stringify(params))
+        ElMessage.success('编辑成功！')
       }
-      state.showDialog = false;
+      state.showDialog = false
     }
-  });
-};
+  })
+}
 const onSuccess = (response) => {
   if (!response) {
-    ElMessage.error("图标编码重复！");
+    ElMessage.error('图标编码重复！')
   } else {
-    ElMessage.success("添加成功！");
-    getIcons();
+    ElMessage.success('添加成功！')
+    getIcons()
   }
-};
+}
 const copy = (code) => {
-  let content = '<ICON code="' + code + '" />';
-  const input = document.createElement("input");
-  input.value = content;
-  document.body.appendChild(input);
-  input.select();
-  document.execCommand("Copy");
-  document.body.removeChild(input);
+  let content = '<ICON code="' + code + '" />'
+  const input = document.createElement('input')
+  input.value = content
+  document.body.appendChild(input)
+  input.select()
+  document.execCommand('Copy')
+  document.body.removeChild(input)
   ElMessage({
-    type: "success",
-    message: "已复制到剪切板",
-    "show-close": true,
+    type: 'success',
+    message: '已复制到剪切板',
+    'show-close': true,
     grouping: true,
-  });
-};
+  })
+}
 </script>
 
 <template>
@@ -231,7 +217,7 @@ const copy = (code) => {
   <el-dialog v-model="state.showDialog" :custom-class="`my-dialog ${smallScreen ? 'general' : 'icon'}`">
     <template #header>
       <ICON :code="state.mode" />
-      <span>{{ state.mode === "add" ? "添加" : "编辑" }}图标</span>
+      <span>{{ state.mode === 'add' ? '添加' : '编辑' }}图标</span>
     </template>
     <el-form :model="formData" ref="form" :label-width="52" :rules="rules">
       <el-form-item label="名称" prop="name">
@@ -241,8 +227,16 @@ const copy = (code) => {
         <el-input v-model="formData.code" maxlength="50" show-word-limit @keyup.enter="save"></el-input>
       </el-form-item>
       <el-form-item label="图标" prop="icon" v-if="state.mode === 'add'">
-        <el-upload ref="upload" action="/ache/icon/add-icon" accept=".svg" :auto-upload="false" :show-file-list="false"
-          :data="{ name: formData.name, code: formData.code }" :on-change="handleChange" :on-success="onSuccess">
+        <el-upload
+          ref="upload"
+          action="/ache/icon/add-icon"
+          accept=".svg"
+          :auto-upload="false"
+          :show-file-list="false"
+          :data="{ name: formData.name, code: formData.code }"
+          :on-change="handleChange"
+          :on-success="onSuccess"
+        >
           <img v-if="formData.xml" :src="formData.xml" />
           <ICON v-else code="add" :size="148" color="#888" />
         </el-upload>
@@ -255,8 +249,7 @@ const copy = (code) => {
       </el-form-item>
     </el-form>
     <template #footer>
-      <el-button :disabled="store.state.user.info.role !== 'admin'" plain @click="state.showDialog = false">取消
-      </el-button>
+      <el-button :disabled="store.state.user.info.role !== 'admin'" plain @click="state.showDialog = false">取消 </el-button>
       <el-button :disabled="store.state.user.info.role !== 'admin'" type="primary" @click="save">确定</el-button>
     </template>
   </el-dialog>
@@ -394,7 +387,7 @@ const copy = (code) => {
           }
         }
 
-        i+i {
+        i + i {
           margin-left: 12px;
         }
       }

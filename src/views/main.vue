@@ -1,10 +1,10 @@
 <script setup>
-import Main from "../components/main/view/main.vue";
-import Small from "../components/main/view/small.vue";
+import Main from '../components/main/view/main.vue'
+import Small from '../components/main/view/small.vue'
 
 const props = defineProps({
   smallScreen: Boolean,
-});
+})
 </script>
 
 <template>
@@ -13,5 +13,4 @@ const props = defineProps({
   <Small v-else :smallScreen="smallScreen"></Small>
 </template>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

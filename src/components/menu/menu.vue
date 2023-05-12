@@ -1,149 +1,144 @@
 <script setup>
-import { onBeforeUnmount, onMounted, ref, watch, reactive } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import menu from "../../../menu.json";
-import { useStore } from "vuex";
-import { ElMessage, ElMessageBox } from "element-plus";
-import visit from "../../js/visit";
-import axios from "axios";
-import md5 from "js-md5";
+import { onBeforeUnmount, onMounted, ref, watch, reactive } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import menu from '../../../menu.json'
+import { useStore } from 'vuex'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import visit from '../../js/visit'
+import axios from 'axios'
+import md5 from 'js-md5'
 
-const store = useStore();
-const route = useRoute();
-const router = useRouter();
-const activeIndex = ref();
-const isFixed = ref(false);
-const showDialog = ref(false);
+const store = useStore()
+const route = useRoute()
+const router = useRouter()
+const activeIndex = ref()
+const isFixed = ref(false)
+const showDialog = ref(false)
 const params = ref({
-  time: "",
-  os: "",
-  screen: "",
-  agent: "",
-  timestamp: "",
-});
+  time: '',
+  os: '',
+  screen: '',
+  agent: '',
+  timestamp: '',
+})
 const formInfo = ref({
-  user: "",
-  pwd: "",
-});
-const form = ref(null);
-const formKey = ref(0);
+  user: '',
+  pwd: '',
+})
+const form = ref(null)
+const formKey = ref(0)
 const rules = reactive({
-  user: [
-    { required: true, message: "请输入用户", trigger: ["blur", "change"] },
-  ],
-  pwd: [{ required: true, message: "请输入密码", trigger: ["blur", "change"] }],
-});
+  user: [{ required: true, message: '请输入用户', trigger: ['blur', 'change'] }],
+  pwd: [{ required: true, message: '请输入密码', trigger: ['blur', 'change'] }],
+})
 
 watch(
   () => route.matched,
   (newValue, oldValue) => {
-    activeIndex.value = newValue[newValue.length - 1].path;
-    document.title = "Ache | " + newValue[newValue.length - 1].name;
+    activeIndex.value = newValue[newValue.length - 1].path
+    document.title = 'Ache | ' + newValue[newValue.length - 1].name
   }
-);
+)
 onMounted(() => {
-  window.addEventListener("scroll", watchScroll, true);
-  insertVisit();
-});
+  window.addEventListener('scroll', watchScroll, true)
+  insertVisit()
+})
 onBeforeUnmount(() => {
-  window.removeEventListener("scroll", watchScroll, true);
-});
+  window.removeEventListener('scroll', watchScroll, true)
+})
 const insertVisit = async () => {
-  const info = await visit.getVisitInfo();
-  params.value.time = info[0];
-  params.value.os = info[1];
-  params.value.screen = info[2];
-  params.value.agent = info[3];
-  params.value.timestamp = info[4];
-  await axios.post("/ache/visit/insert-visitor", params.value);
-};
+  const info = await visit.getVisitInfo()
+  params.value.time = info[0]
+  params.value.os = info[1]
+  params.value.screen = info[2]
+  params.value.agent = info[3]
+  params.value.timestamp = info[4]
+  await axios.post('/ache/visit/insert-visitor', params.value)
+}
 const watchScroll = () => {
-  let scrollTop =
-    window.pageYOffset ||
-    document.documentElement.scrollTop ||
-    document.body.scrollTop;
-  let offsetTop = document.querySelector(".nav").offsetTop + 272;
+  let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+  let offsetTop = document.querySelector('.nav').offsetTop + 272
   if (scrollTop >= offsetTop) {
-    isFixed.value = true;
+    isFixed.value = true
   } else {
-    isFixed.value = false;
+    isFixed.value = false
   }
-};
+}
 const jump = (address) => {
-  if (address === "github") {
-    window.open("https://github.com/fadeache");
+  if (address === 'github') {
+    window.open('https://github.com/fadeache')
   } else {
-    window.open("https://blog.csdn.net/bDreamer");
+    window.open('https://blog.csdn.net/bDreamer')
   }
-};
+}
 
 const resetForm = () => {
-  form.value.resetFields();
-  formKey.value++;
-};
+  form.value.resetFields()
+  formKey.value++
+}
 const submitForm = () => {
   form.value.validate((valid, fields) => {
     if (valid) {
-      store.dispatch("user/login", formInfo.value).then((rst) => {
+      store.dispatch('user/login', formInfo.value).then((rst) => {
         if (rst) {
           ElMessage({
-            type: "success",
-            message: "登录成功！",
+            type: 'success',
+            message: '登录成功！',
             showClose: true,
             grouping: true,
-          });
-          showDialog.value = false;
+          })
+          showDialog.value = false
         } else {
           ElMessage({
-            type: "error",
-            message: "登录失败！请重新登录！",
+            type: 'error',
+            message: '登录失败！请重新登录！',
             showClose: true,
             grouping: true,
-          });
+          })
         }
-      });
+      })
     }
-  });
-};
+  })
+}
 const exit = () => {
-  store.dispatch("user/exit", store.state.user.info).then((rst) => {
+  store.dispatch('user/exit', store.state.user.info).then((rst) => {
     ElMessage({
-      type: "info",
+      type: 'info',
       message: rst,
       showClose: true,
       grouping: true,
-    });
-    resetForm();
-  });
-  showDialog.value = false;
-};
+    })
+    resetForm()
+  })
+  showDialog.value = false
+}
 const register = () => {
   form.value.validate(async (valid, fields) => {
     if (valid) {
-      let info = formInfo.value.user.split("?");
-      ElMessageBox.confirm("确定要注册<" + info[0] + ">用户吗？", "注册提示", {
+      let info = formInfo.value.user.split('?')
+      ElMessageBox.confirm('确定要注册<' + info[0] + '>用户吗？', '注册提示', {
         distinguishCancelAndClose: true,
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
       }).then(async () => {
-        let res = await axios.post("/ache/user/add-user", {
+        let res = await axios.post('/ache/user/add-user', {
           user: info[0],
-          pwd: md5(md5(formInfo.value.pwd) + md5(md5("1424834523"))),
+          pwd: md5(md5(formInfo.value.pwd) + md5(md5('1424834523'))),
           role: info[1],
           name: info[2],
-        });
+        })
         if (res) {
           ElMessage({
-            type: "success",
-            message: "注册成功！",
+            type: 'success',
+            message: '注册成功！',
             showClose: true,
             grouping: true,
-          });
+          })
         }
-      });
+      })
     }
-  });
-};
+  })
+}
 </script>
 
 <template>
@@ -162,8 +157,7 @@ const register = () => {
               <ICON :code="item.icon" />
               <span class="title">{{ item.title }}</span>
             </template>
-            <el-menu-item class="el-menu-item" v-for="sub in item.children" :key="sub.name"
-              :index="item.router + sub.router">
+            <el-menu-item class="el-menu-item" v-for="sub in item.children" :key="sub.name" :index="item.router + sub.router">
               <ICON :code="item.icon" />
               <span class="title">{{ sub.title }}</span>
             </el-menu-item>
@@ -198,16 +192,21 @@ const register = () => {
   </div>
   <el-dialog v-model="showDialog" custom-class="my-dialog login">
     <template #header>
-      <img src="https://zhang.beer:9999/ache/beer/menu/login.svg"
-        style="height: 20px; width: 40px; vertical-align: -16%" />
+      <img src="https://zhang.beer:9999/ache/beer/menu/login.svg" style="height: 20px; width: 40px; vertical-align: -16%" />
     </template>
     <el-form :model="formInfo" ref="form" :rules="rules" :key="formKey">
       <el-form-item label="用户" prop="user">
         <el-input v-model="formInfo.user" clearable v-on:keyup.enter="submitForm"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="pwd">
-        <el-input type="password" v-model="formInfo.pwd" autocomplete="off" show-password clearable
-          v-on:keyup.enter="submitForm"></el-input>
+        <el-input
+          type="password"
+          v-model="formInfo.pwd"
+          autocomplete="off"
+          show-password
+          clearable
+          v-on:keyup.enter="submitForm"
+        ></el-input>
       </el-form-item>
     </el-form>
     <template #footer>

@@ -1,123 +1,121 @@
 <script setup>
-import axios from "axios";
-import { computed, onMounted, reactive, ref, nextTick, watch } from "vue";
-import { useStore } from "vuex";
-import { ElMessage } from "element-plus";
+import axios from 'axios'
+import { computed, onMounted, reactive, ref, nextTick, watch } from 'vue'
+import { useStore } from 'vuex'
+import { ElMessage } from 'element-plus'
 
 const store = useStore()
 
 const state = reactive({
   schedules: [],
   showDialog: false,
-  dialogTitle: "",
-  dialogMode: "",
+  dialogTitle: '',
+  dialogMode: '',
   showOperation: true,
   exchangeArr: [],
-});
+})
 
-const form = ref(null);
-const formKey = ref(0);
+const form = ref(null)
+const formKey = ref(0)
 
 onMounted(() => {
-  updateSchedules();
-});
+  updateSchedules()
+})
 
 watch(
   () => store.state.user.info,
   () => {
-    updateSchedules();
-    state.exchangeArr = [];
+    updateSchedules()
+    state.exchangeArr = []
   }
-);
+)
 
 const updateSchedules = async () => {
-  let res = await axios.get("/ache/calendar/get-calendar");
-  state.schedules = res.data;
-};
+  let res = await axios.get('/ache/calendar/get-calendar')
+  state.schedules = res.data
+}
 
 const getSchedules = computed(() => {
   return function (data) {
-    let theDay = [];
+    let theDay = []
     state.schedules.find((item) => {
       if (item.date === data.day) {
-        theDay.push(item);
+        theDay.push(item)
       }
-    });
-    return theDay;
-  };
-});
+    })
+    return theDay
+  }
+})
 
 const operateSchedule = (mode) => {
   form.value.validate(async (valid, fields) => {
     if (valid) {
-      mode === "add"
-        ? await axios.post("/ache/calendar/add-calendar", aSchedule.value)
-        : await axios.put("/ache/calendar/edit-calendar", aSchedule.value);
-      updateSchedules();
-      state.showDialog = false;
+      mode === 'add'
+        ? await axios.post('/ache/calendar/add-calendar', aSchedule.value)
+        : await axios.put('/ache/calendar/edit-calendar', aSchedule.value)
+      updateSchedules()
+      state.showDialog = false
     }
-  });
-};
+  })
+}
 const aSchedule = ref({
-  date: "",
-  event: "",
+  date: '',
+  event: '',
   completed: 0,
-});
+})
 const deleteSchedule = async (id) => {
-  await axios.delete("/ache/calendar/delete-calendar", { params: { id: parseInt(id) } });
-  updateSchedules();
-};
+  await axios.delete('/ache/calendar/delete-calendar', { params: { id: parseInt(id) } })
+  updateSchedules()
+}
 
 const displayDialog = (title, mode, data) => {
-  state.dialogTitle = title;
-  state.dialogMode = mode;
-  if (mode === "add") {
+  state.dialogTitle = title
+  state.dialogMode = mode
+  if (mode === 'add') {
     aSchedule.value = {
-      date: "",
-      event: "",
+      date: '',
+      event: '',
       completed: 0,
-    };
+    }
     nextTick(() => {
       if (form.value) {
-        form.value.resetFields();
+        form.value.resetFields()
       }
-    });
-    formKey.value++;
+    })
+    formKey.value++
   } else {
-    aSchedule.value = data;
+    aSchedule.value = data
   }
-  state.showDialog = true;
-};
+  state.showDialog = true
+}
 
 const rules = reactive({
-  date: [{ required: true, message: "请选择日期", trigger: ["blur"] }],
-  event: [
-    { required: true, message: "请输入待办事件", trigger: ["blur", "change"] },
-  ],
-});
+  date: [{ required: true, message: '请选择日期', trigger: ['blur'] }],
+  event: [{ required: true, message: '请输入待办事件', trigger: ['blur', 'change'] }],
+})
 
 const exchange = async (item) => {
-  state.exchangeArr.push(item.id);
+  state.exchangeArr.push(item.id)
   if (state.exchangeArr.length === 1) {
     ElMessage({
-      message: "当前选择事件：" + item.event,
-    });
+      message: '当前选择事件：' + item.event,
+    })
   } else if (state.exchangeArr.length === 2) {
     ElMessage({
-      message: "与之交换的事件" + item.event,
-    });
-    await axios.put("/ache/calendar/exchange-calendar", {
+      message: '与之交换的事件' + item.event,
+    })
+    await axios.put('/ache/calendar/exchange-calendar', {
       id1: state.exchangeArr[0],
       id2: state.exchangeArr[1],
-    });
+    })
     ElMessage({
-      type: "success",
-      message: "位置交换成功！",
-    });
-    updateSchedules();
-    state.exchangeArr = [];
+      type: 'success',
+      message: '位置交换成功！',
+    })
+    updateSchedules()
+    state.exchangeArr = []
   }
-};
+}
 </script>
 
 <template>
@@ -127,44 +125,52 @@ const exchange = async (item) => {
         <ICON code="about" />
       </template>
       <span>&nbsp;</span>
-      <span class="gm" @click="displayDialog('添加日程', 'add')">
-        添加日程
-      </span>
+      <span class="gm" @click="displayDialog('添加日程', 'add')"> 添加日程 </span>
       <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
       <span class="gm" @click="state.showOperation = !state.showOperation">隐藏操作</span>
     </el-popover>
   </div>
-  <el-calendar v-model="state.value"><template #dateCell="{ data }">
+  <el-calendar v-model="state.value"
+    ><template #dateCell="{ data }">
       <el-popover placement="top-start" trigger="click" v-if="getSchedules(data).length" width="auto">
         <li v-for="item in getSchedules(data)">
-          <span style="cursor: pointer" :style="[
-            item.completed === 200
-              ? 'color:red'
-              : item.completed === 100
+          <span
+            style="cursor: pointer"
+            :style="[
+              item.completed === 200
+                ? 'color:red'
+                : item.completed === 100
                 ? 'color:#5cb87a'
                 : item.completed >= 60
-                  ? 'color:#6f7ad3'
-                  : item.completed >= 40
-                    ? 'color:#e6a23c'
-                    : item.completed >= 20
-                      ? 'color:#f56c6c'
-                      : 'color:#909399',
-          ]" @click="exchange(item)">{{ item.event }}</span><span class="gm" style="float: right"
-            v-show="state.showOperation" @click="deleteSchedule(item.id)">delete</span><span class="gm"
-            style="margin: 0 8px; float: right" v-show="state.showOperation"
-            @click="displayDialog('编辑日程', 'edit', item)">edit</span><span v-if="item.completed" style="margin-left: 8px">
-            —{{ item.completed }}%</span>
+                ? 'color:#6f7ad3'
+                : item.completed >= 40
+                ? 'color:#e6a23c'
+                : item.completed >= 20
+                ? 'color:#f56c6c'
+                : 'color:#909399',
+            ]"
+            @click="exchange(item)"
+            >{{ item.event }}</span
+          ><span class="gm" style="float: right" v-show="state.showOperation" @click="deleteSchedule(item.id)">delete</span
+          ><span
+            class="gm"
+            style="margin: 0 8px; float: right"
+            v-show="state.showOperation"
+            @click="displayDialog('编辑日程', 'edit', item)"
+            >edit</span
+          ><span v-if="item.completed" style="margin-left: 8px"> —{{ item.completed }}%</span>
         </li>
         <template #reference>
           <div class="hasSchedules">
-            {{ data.day.split("-").slice(2).join("") }}
+            {{ data.day.split('-').slice(2).join('') }}
           </div>
         </template>
       </el-popover>
       <div v-else>
-        {{ data.day.split("-").slice(2).join("") }}
+        {{ data.day.split('-').slice(2).join('') }}
       </div>
-    </template></el-calendar>
+    </template></el-calendar
+  >
 
   <el-dialog v-model="state.showDialog" custom-class="my-dialog general">
     <template #header>
@@ -172,8 +178,14 @@ const exchange = async (item) => {
     </template>
     <el-form :model="aSchedule" ref="form" :rules="rules" :key="formKey" :label-width="52">
       <el-form-item label="日期" prop="date">
-        <el-date-picker :editable="false" v-model="aSchedule.date" type="date" placeholder="选择日期" format="YYYY/MM/DD"
-          value-format="YYYY-MM-DD">
+        <el-date-picker
+          :editable="false"
+          v-model="aSchedule.date"
+          type="date"
+          placeholder="选择日期"
+          format="YYYY/MM/DD"
+          value-format="YYYY-MM-DD"
+        >
         </el-date-picker>
       </el-form-item>
       <el-form-item label="事件" prop="event">
@@ -215,7 +227,7 @@ const exchange = async (item) => {
       }
 
       .hasSchedules::before {
-        content: "";
+        content: '';
         position: absolute;
         width: 18px;
         height: 2px;

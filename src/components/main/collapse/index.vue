@@ -1,24 +1,23 @@
 <script setup>
-import { reactive, ref, nextTick, onBeforeMount } from "vue";
-import axios from "axios";
-import { useStore } from "vuex";
+import { reactive, ref, nextTick, onBeforeMount } from 'vue'
+import axios from 'axios'
+import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
-import { ElMessage, ElMessageBox } from "element-plus";
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 const store = useStore()
 const route = useRoute()
 
 const props = defineProps({
   smallScreen: Boolean,
-});
+})
 
 const state = reactive({
-  activeName: "1",
+  activeName: '1',
   activeId: null,
   showDialog: false,
-  loading: false
-});
-
+  loading: false,
+})
 
 onBeforeMount(() => {
   getWords()
@@ -34,118 +33,140 @@ const getWords = async () => {
   let res = await axios.get('ache/words/get-words')
   words.value = res.data
   state.activeId = res.data[0].id
-  words.value.forEach(i => {
-    console.log(i.zhcn);
+  words.value.forEach((i) => {
+    console.log(i.zhcn)
   })
 }
 
 const deleteWord = async (id) => {
-  ElMessageBox.confirm("确定要删除这句话吗？", "删除提示", {
+  ElMessageBox.confirm('确定要删除这句话吗？', '删除提示', {
     distinguishCancelAndClose: true,
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
   }).then(async () => {
-    await axios.delete("/ache/words/delete-word", { params: { id: parseInt(id) } });
+    await axios.delete('/ache/words/delete-word', { params: { id: parseInt(id) } })
     getWords()
-  });
+  })
 }
 
 const formInfo = ref({
-  zhcn: "",
-  enus: "",
-  lang: 'en'
-});
-const options = ref([{
-  label: '中文',
-  value: 'zh',
-}, {
-  label: '繁体中文',
-  value: 'cht',
-}, {
-  label: '英文',
-  value: 'en',
-}, {
-  label: '粤语',
-  value: 'yue',
-}, {
-  label: '文言文',
-  value: 'wyw',
-}, {
-  label: '日语',
-  value: 'jp',
-}, {
-  label: '韩语',
-  value: 'kor',
-}, {
-  label: '法语',
-  value: 'fra',
-}, {
-  label: '西班牙语',
-  value: 'spa',
-}, {
-  label: '泰语',
-  value: 'th',
-}, {
-  label: '俄语',
-  value: 'ru',
-}, {
-  label: '葡萄牙语',
-  value: 'pt',
-}, {
-  label: '德语',
-  value: 'de',
-}, {
-  label: '意大利语',
-  value: 'it',
-}, {
-  label: '希腊语',
-  value: 'el',
-}, {
-  label: '荷兰语',
-  value: 'nl',
-}, {
-  label: '波兰语',
-  value: 'pl',
-}, {
-  label: '丹麦语',
-  value: 'dan',
-}, {
-  label: '芬兰语',
-  value: 'fin',
-}, {
-  label: '捷克语',
-  value: 'cs',
-}, {
-  label: '匈牙利语',
-  value: 'hu',
-}, {
-  label: '越南语',
-  value: 'vie',
-}, {
-  label: '瑞典语',
-  value: 'swe',
-}])
+  zhcn: '',
+  enus: '',
+  lang: 'en',
+})
+const options = ref([
+  {
+    label: '中文',
+    value: 'zh',
+  },
+  {
+    label: '繁体中文',
+    value: 'cht',
+  },
+  {
+    label: '英文',
+    value: 'en',
+  },
+  {
+    label: '粤语',
+    value: 'yue',
+  },
+  {
+    label: '文言文',
+    value: 'wyw',
+  },
+  {
+    label: '日语',
+    value: 'jp',
+  },
+  {
+    label: '韩语',
+    value: 'kor',
+  },
+  {
+    label: '法语',
+    value: 'fra',
+  },
+  {
+    label: '西班牙语',
+    value: 'spa',
+  },
+  {
+    label: '泰语',
+    value: 'th',
+  },
+  {
+    label: '俄语',
+    value: 'ru',
+  },
+  {
+    label: '葡萄牙语',
+    value: 'pt',
+  },
+  {
+    label: '德语',
+    value: 'de',
+  },
+  {
+    label: '意大利语',
+    value: 'it',
+  },
+  {
+    label: '希腊语',
+    value: 'el',
+  },
+  {
+    label: '荷兰语',
+    value: 'nl',
+  },
+  {
+    label: '波兰语',
+    value: 'pl',
+  },
+  {
+    label: '丹麦语',
+    value: 'dan',
+  },
+  {
+    label: '芬兰语',
+    value: 'fin',
+  },
+  {
+    label: '捷克语',
+    value: 'cs',
+  },
+  {
+    label: '匈牙利语',
+    value: 'hu',
+  },
+  {
+    label: '越南语',
+    value: 'vie',
+  },
+  {
+    label: '瑞典语',
+    value: 'swe',
+  },
+])
 
 const rules = reactive({
-  zhcn: [
-    { required: true, message: "请输入句子", trigger: ["blur", "change"] },
-  ],
-  enus: [{ required: true, message: "请输入外文", trigger: ["blur", "change"] }],
-});
+  zhcn: [{ required: true, message: '请输入句子', trigger: ['blur', 'change'] }],
+  enus: [{ required: true, message: '请输入外文', trigger: ['blur', 'change'] }],
+})
 
 const form = ref(null)
 
 const addWord = () => {
   form.value.validate(async (valid, fields) => {
     if (valid) {
-      await axios.post("/ache/words/add-word", formInfo.value);
+      await axios.post('/ache/words/add-word', formInfo.value)
       ElMessage({
-        type: "success",
-        message: "句子添加成功！",
-      });
+        type: 'success',
+        message: '句子添加成功！',
+      })
       state.showDialog = false
     }
-  });
+  })
 }
 
 const showDialog = () => {
@@ -169,12 +190,10 @@ const translate = async () => {
 </script>
 
 <template>
-  <el-collapse v-model="state.activeName" accordion v-for="(item, index) in words" :key="item"
-    @change="state.activeId = item.id">
+  <el-collapse v-model="state.activeName" accordion v-for="(item, index) in words" :key="item" @change="state.activeId = item.id">
     <el-collapse-item :title="item.zhcn" :name="(index + 1).toString()">
       <div>{{ item.enus }}</div>
-      <div class="minus" v-if="store.state.user.info.role === 'admin' && state.activeId === item.id"
-        @click="deleteWord(item.id)">
+      <div class="minus" v-if="store.state.user.info.role === 'admin' && state.activeId === item.id" @click="deleteWord(item.id)">
         <ICON code="minus" />
       </div>
     </el-collapse-item>
@@ -190,21 +209,37 @@ const translate = async () => {
     </template>
     <el-form :model="formInfo" ref="form" :rules="rules" :label-width="52">
       <el-form-item label="句子" prop="zhcn">
-        <el-input type="textarea" :rows="3" placeholder="请输入句子" v-model="formInfo.zhcn" clearable
-          v-on:keyup.enter="translate"></el-input>
+        <el-input
+          type="textarea"
+          :rows="3"
+          placeholder="请输入句子"
+          v-model="formInfo.zhcn"
+          clearable
+          v-on:keyup.enter="translate"
+        ></el-input>
       </el-form-item>
       <el-form-item label="语言" prop="lang">
         <el-select v-model="formInfo.lang" placeholder="请选择翻译语言" filterable>
           <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
-        <el-button v-loading="state.loading" type="primary"
-          :style="[smallScreen ? 'margin-top: 16px;display:block' : 'margin-left: 28px']" @click="translate">
+        <el-button
+          v-loading="state.loading"
+          type="primary"
+          :style="[smallScreen ? 'margin-top: 16px;display:block' : 'margin-left: 28px']"
+          @click="translate"
+        >
           翻译
         </el-button>
       </el-form-item>
       <el-form-item label="外文" prop="enus">
-        <el-input type="textarea" :rows="3" placeholder="请输入外文，可手动输入或者自动翻译" v-model="formInfo.enus" clearable
-          v-on:keyup.enter="addWord"></el-input>
+        <el-input
+          type="textarea"
+          :rows="3"
+          placeholder="请输入外文，可手动输入或者自动翻译"
+          v-model="formInfo.enus"
+          clearable
+          v-on:keyup.enter="addWord"
+        ></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -228,7 +263,7 @@ const translate = async () => {
 
     .el-collapse-item__content {
       color: #677383;
-      font-family: "Times New Roman", Times, serif;
+      font-family: 'Times New Roman', Times, serif;
       font-style: italic;
     }
   }

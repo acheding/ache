@@ -1,31 +1,31 @@
 <script setup>
-import Menu from "./components/menu/menu.vue";
-import Small from "./components/menu/small.vue";
-import { useRoute } from "vue-router";
-import { useStore } from "vuex";
-import { onBeforeUnmount, ref, onBeforeMount } from "vue";
-const route = useRoute();
-const store = useStore();
+import Menu from './components/menu/menu.vue'
+import Small from './components/menu/small.vue'
+import { useRoute } from 'vue-router'
+import { useStore } from 'vuex'
+import { onBeforeUnmount, ref, onBeforeMount } from 'vue'
+const route = useRoute()
+const store = useStore()
 
 onBeforeMount(() => {
-  store.dispatch("user/login"); // 在整个页面加载之前加上headers
-  renderResize();
-  window.addEventListener("resize", renderResize);
-});
+  store.dispatch('user/login') // 在整个页面加载之前加上headers
+  renderResize()
+  window.addEventListener('resize', renderResize)
+})
 onBeforeUnmount(() => {
-  window.removeEventListener("resize", renderResize);
-});
-const smallScreen = ref(false);
+  window.removeEventListener('resize', renderResize)
+})
+const smallScreen = ref(false)
 const renderResize = () => {
-  let width = document.documentElement.clientWidth;
+  let width = document.documentElement.clientWidth
   if (width < 1229) {
-    smallScreen.value = true;
-    document.getElementsByTagName("body")[0].style.backgroundColor = "#fff";
+    smallScreen.value = true
+    document.getElementsByTagName('body')[0].style.backgroundColor = '#fff'
   } else {
-    smallScreen.value = false;
-    document.getElementsByTagName("body")[0].style.backgroundColor = "#f5f7f9";
+    smallScreen.value = false
+    document.getElementsByTagName('body')[0].style.backgroundColor = '#f5f7f9'
   }
-};
+}
 const jump = () => window.open('https://beian.miit.gov.cn/')
 </script>
 
@@ -39,12 +39,11 @@ const jump = () => window.open('https://beian.miit.gov.cn/')
       <router-view v-if="route.matched[0]?.path" :smallScreen="smallScreen"></router-view>
     </el-main>
   </el-container>
-  <div v-if="!smallScreen" class="record" @click="jump">
-    Copyright ©2021 浙ICP备2021040041号</div>
+  <div v-if="!smallScreen" class="record" @click="jump">Copyright ©2021 浙ICP备2021040041号</div>
 </template>
 
 <style lang="scss">
-@import "./style/general.scss";
+@import './style/general.scss';
 
 #app {
   margin-top: 16px;

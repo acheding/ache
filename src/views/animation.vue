@@ -1,7 +1,7 @@
 <script setup>
 const props = defineProps({
   smallScreen: Boolean,
-});
+})
 </script>
 <template>
   <div class="container" :class="{ smallScreen: smallScreen }">
@@ -217,15 +217,15 @@ const props = defineProps({
 </template>
 
 <script>
-import animation from "../js/animation";
+import animation from '../js/animation'
 
 export default {
   mounted() {
-    animation.exchange();
+    animation.exchange()
   },
-};
+}
 </script>
 
 <style scoped>
-@import "../style/animation.css";
+@import '../style/animation.css';
 </style>

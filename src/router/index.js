@@ -1,20 +1,20 @@
-import { createRouter, createWebHistory } from "vue-router";
-import menu from "../../menu.json";
+import { createRouter, createWebHistory } from 'vue-router'
+import menu from '../../menu.json'
 const getRoute = (menu, parentPath) => {
   return menu?.map((item) => {
-    let path = parentPath + item.router;
+    let path = parentPath + item.router
     return {
       path,
       name: item.name,
       component: () => import(`../views/${item.view}.vue`),
       children: getRoute(item.children, path),
-    };
-  });
-};
-const routes = getRoute(menu, "");
+    }
+  })
+}
+const routes = getRoute(menu, '')
 const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_APP_PATH),
   routes,
-});
+})
 
-export default router;
+export default router

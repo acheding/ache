@@ -1,9 +1,9 @@
 <script setup>
-import Calendar from "../calendar/index.vue";
-import Collapse from "../collapse/index.vue";
+import Calendar from '../calendar/index.vue'
+import Collapse from '../collapse/index.vue'
 
 const props = defineProps({
-  smallScreen: Boolean
+  smallScreen: Boolean,
 })
 </script>
 

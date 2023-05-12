@@ -1,146 +1,138 @@
 <script setup>
-import { reactive, ref } from "vue";
-import axios from "axios";
-import { ElMessage } from "element-plus";
-import { useRouter } from "vue-router";
+import { reactive, ref } from 'vue'
+import axios from 'axios'
+import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router'
 
-const router = useRouter();
+const router = useRouter()
 
 const props = defineProps({
   smallScreen: Boolean,
-});
+})
 
 const state = reactive({
   loading: false,
   showDialog: false,
   dialogData: {},
   result: '',
-  radio: "1920",
-});
+  radio: '1920',
+})
 
 const apis = ref([
   {
-    icon: "trash",
-    name: "trash words generator",
-    api: "other/trash",
-    abstract: "学学土味烧话。",
+    icon: 'trash',
+    name: 'trash words generator',
+    api: 'other/trash',
+    abstract: '学学土味烧话。',
   },
   {
-    icon: "green",
-    name: "green tea words generator",
-    api: "other/green",
-    abstract: "原来这就是绿茶。",
+    icon: 'green',
+    name: 'green tea words generator',
+    api: 'other/green',
+    abstract: '原来这就是绿茶。',
   },
   {
-    icon: "rainbow",
-    name: "彩虹屁",
-    api: "other/chp",
-    abstract: "快速生成彩虹屁，快去夸夸ta。",
+    icon: 'rainbow',
+    name: '彩虹屁',
+    api: 'other/chp',
+    abstract: '快速生成彩虹屁，快去夸夸ta。',
   },
   {
-    icon: "one",
-    name: "一言",
-    api: "other/one",
+    icon: 'one',
+    name: '一言',
+    api: 'other/one',
     abstract:
-      "动漫也好、小说也好、网络也好，不论在哪里，总有那么一两个句子能穿透你的心。一言指的就是一句话，可以是动漫中的台词，也可以是网络上的各种小段子。 或是感动，或是开心，亦或是单纯的回忆。",
+      '动漫也好、小说也好、网络也好，不论在哪里，总有那么一两个句子能穿透你的心。一言指的就是一句话，可以是动漫中的台词，也可以是网络上的各种小段子。 或是感动，或是开心，亦或是单纯的回忆。',
   },
   {
-    icon: "pyq",
-    name: "朋友圈文案",
-    api: "other/pyq",
-    abstract: "朋友圈文案（反正我不会发）。",
+    icon: 'pyq',
+    name: '朋友圈文案',
+    api: 'other/pyq',
+    abstract: '朋友圈文案（反正我不会发）。',
   },
   {
-    icon: "soup",
-    name: "毒鸡汤",
-    api: "other/du",
-    abstract: "没得一句好听的话。",
+    icon: 'soup',
+    name: '毒鸡汤',
+    api: 'other/du',
+    abstract: '没得一句好听的话。',
   },
   {
-    icon: "hdpic",
-    name: "每日壁纸",
-    api: "https://api.dujin.org/bing/1920.php",
-    abstract: "自动生成一张高清壁纸。",
+    icon: 'hdpic',
+    name: '每日壁纸',
+    api: 'https://api.dujin.org/bing/1920.php',
+    abstract: '自动生成一张高清壁纸。',
   },
   {
-    icon: "dog",
-    name: "狗屁不通文章生成器",
-    api: "https://suulnnka.github.io/BullshitGenerator/index.html",
-    abstract: "根据关键词一键生成一篇魔幻形式主义大作。",
+    icon: 'dog',
+    name: '狗屁不通文章生成器',
+    api: 'https://suulnnka.github.io/BullshitGenerator/index.html',
+    abstract: '根据关键词一键生成一篇魔幻形式主义大作。',
   },
   {
-    icon: "letter",
-    name: "时光邮局",
-    api: "https://www.hi2future.com/",
-    abstract: "给未来写一封信吧",
+    icon: 'letter',
+    name: '时光邮局',
+    api: 'https://www.hi2future.com/',
+    abstract: '给未来写一封信吧',
   },
-]);
+])
 
 const getWords = async (item) => {
-  state.dialogData = item;
-  state.result = '';
-  if (item.icon !== "hdpic") {
-    detail(item);
+  state.dialogData = item
+  state.result = ''
+  if (item.icon !== 'hdpic') {
+    detail(item)
   }
-  if (item.icon !== "dog" && item.icon !== "letter") {
-    state.showDialog = true;
+  if (item.icon !== 'dog' && item.icon !== 'letter') {
+    state.showDialog = true
   }
-};
+}
 const detail = async (item, evt) => {
   if (evt) {
-    let target = evt.target; // 取消聚焦
-    if (target.nodeName == "SPAN") {
-      target = evt.target.parentNode;
+    let target = evt.target // 取消聚焦
+    if (target.nodeName == 'SPAN') {
+      target = evt.target.parentNode
     }
-    target.blur();
+    target.blur()
   }
 
-  if (item.icon === "trash") {
-    let res = await axios.get(item.api);
-    state.result = res.data.returnObj[0];
-  } else if (item.icon === "green") {
-    let res = await axios.get(item.api);
-    state.result = res.data.returnObj.content;
-  } else if (
-    item.icon === "rainbow" ||
-    item.icon === "pyq" ||
-    item.icon === "soup"
-  ) {
-    let res = await axios.get(item.api);
-    state.result = res.data.data.text;
-  } else if (item.icon === "one") {
-    let res = await axios.get(item.api);
-    state.result = res.data.hitokoto + (res.data.from_who ? "——" + res.data.from_who : "");
-  } else if (item.icon === "hdpic") {
-    if (
-      state.radio === "1920" ||
-      state.radio === "1366" ||
-      state.radio === "m"
-    ) {
-      window.open("https://api.dujin.org/bing/" + state.radio + ".php");
+  if (item.icon === 'trash') {
+    let res = await axios.get(item.api)
+    state.result = res.data.returnObj[0]
+  } else if (item.icon === 'green') {
+    let res = await axios.get(item.api)
+    state.result = res.data.returnObj.content
+  } else if (item.icon === 'rainbow' || item.icon === 'pyq' || item.icon === 'soup') {
+    let res = await axios.get(item.api)
+    state.result = res.data.data.text
+  } else if (item.icon === 'one') {
+    let res = await axios.get(item.api)
+    state.result = res.data.hitokoto + (res.data.from_who ? '——' + res.data.from_who : '')
+  } else if (item.icon === 'hdpic') {
+    if (state.radio === '1920' || state.radio === '1366' || state.radio === 'm') {
+      window.open('https://api.dujin.org/bing/' + state.radio + '.php')
     } else {
-      window.open("https://api.ixiaowai.cn/" + state.radio + ".php");
+      window.open('https://api.ixiaowai.cn/' + state.radio + '.php')
     }
-  } else if (item.icon === "dog" || item.icon === "letter") {
-    window.open(item.api);
+  } else if (item.icon === 'dog' || item.icon === 'letter') {
+    window.open(item.api)
   }
-};
+}
 
 const copy = () => {
-  let content = state.result;
-  const input = document.createElement("input");
-  input.value = content;
-  document.body.appendChild(input);
-  input.select();
-  document.execCommand("Copy");
-  document.body.removeChild(input);
+  let content = state.result
+  const input = document.createElement('input')
+  input.value = content
+  document.body.appendChild(input)
+  input.select()
+  document.execCommand('Copy')
+  document.body.removeChild(input)
   ElMessage({
-    type: "success",
-    message: "已复制到剪切板",
-    "show-close": true,
+    type: 'success',
+    message: '已复制到剪切板',
+    'show-close': true,
     grouping: true,
-  });
-};
+  })
+}
 const jump = () => {
   router.push({ name: 'main', params: { word: state.result } })
 }
@@ -161,14 +153,21 @@ const jump = () => {
     </div>
   </div>
 
-  <el-dialog v-model="state.showDialog" v-if="state.showDialog"
-    :custom-class="`my-dialog ${smallScreen ? 'smallNormal' : state.dialogData.icon === 'hdpic' ? 'normal' : 'small'}`">
+  <el-dialog
+    v-model="state.showDialog"
+    v-if="state.showDialog"
+    :custom-class="`my-dialog ${smallScreen ? 'smallNormal' : state.dialogData.icon === 'hdpic' ? 'normal' : 'small'}`"
+  >
     <template #header>
       <div class="title">
         <img :src="`https://zhang.beer:9999/ache/beer/word/${state.dialogData.icon}.svg`" />
         <span>{{ state.dialogData.name }}</span>
-        <el-tooltip v-if="state.dialogData.icon !== 'hdpic'" content="点击句子可复制到剪切板，点击添加可跳转到首页添加此句子。" placement="top-start"
-          effect="light">
+        <el-tooltip
+          v-if="state.dialogData.icon !== 'hdpic'"
+          content="点击句子可复制到剪切板，点击添加可跳转到首页添加此句子。"
+          placement="top-start"
+          effect="light"
+        >
           <ICON code="about" />
         </el-tooltip>
       </div>

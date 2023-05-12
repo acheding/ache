@@ -1,65 +1,60 @@
 <script setup>
-import { ref, onBeforeMount, watch, reactive } from "vue";
-import axios from "axios";
-import translate from "../utils/translate.js";
+import { ref, onBeforeMount, watch, reactive } from 'vue'
+import axios from 'axios'
+import translate from '../utils/translate.js'
 
 const props = defineProps({
   smallScreen: Boolean,
-});
+})
 
 const state = reactive({
   active: 0,
   reverseActive: false,
-});
-const blogType = ref(["all", "css", "vue", "micro", "server"]);
-const blogs = ref([]);
+})
+const blogType = ref(['all', 'css', 'vue', 'micro', 'server'])
+const blogs = ref([])
 const filter = ref({
-  sort: "",
-  type: "",
-  search: "",
-});
+  sort: '',
+  type: '',
+  search: '',
+})
 
-onBeforeMount(() =>
-{
-  getBlog();
-});
+onBeforeMount(() => {
+  getBlog()
+})
 
 watch(
   () => filter.value.search,
-  () =>
-  {
-    getBlog();
+  () => {
+    getBlog()
   }
-);
+)
 
-const jump = (type, url) =>
-{
+const jump = (type, url) => {
   let suffix = url ? '/' + url + '.html' : ''
-  window.open("https://zhang.beer/vuepress/blog/" + type + suffix);
-};
+  window.open('https://zhang.beer/vuepress/blog/' + type + suffix)
+}
 
-const getBlog = async (index, type, sort) =>
-{
+const getBlog = async (index, type, sort) => {
   if (type) {
-    if (type === "all") filter.value.type = "";
-    else filter.value.type = type;
-    state.active = index;
+    if (type === 'all') filter.value.type = ''
+    else filter.value.type = type
+    state.active = index
   }
   if (sort) {
-    if (filter.value.sort === "reverse") {
-      filter.value.sort = "";
-      state.reverseActive = false;
+    if (filter.value.sort === 'reverse') {
+      filter.value.sort = ''
+      state.reverseActive = false
     } else {
-      filter.value.sort = "reverse";
-      state.reverseActive = true;
+      filter.value.sort = 'reverse'
+      state.reverseActive = true
     }
   }
-  let res = await axios.get("/ache/blog/get-blogs", { params: filter.value });
-  blogs.value = res.data;
-};
+  let res = await axios.get('/ache/blog/get-blogs', { params: filter.value })
+  blogs.value = res.data
+}
 
-const highLight = (allText, keyword) =>
-{
+const highLight = (allText, keyword) => {
   // let specialCharacter = ["\\", "(", ")", "_", "*", "+", ".", "[", "]", "?"];
   // specialCharacter.map((v) => {
   //   let qwq = new RegExp("\\" + v, "gim");
@@ -67,26 +62,26 @@ const highLight = (allText, keyword) =>
   // });
   // console.log(keyword);
 
-  let Reg = new RegExp(keyword, "ig");
+  let Reg = new RegExp(keyword, 'ig')
   if (allText) {
-    let execRes = Reg.exec(allText.toString()); //得到一个匹配结果的集合，包含关键字出现的索引
+    let execRes = Reg.exec(allText.toString()) //得到一个匹配结果的集合，包含关键字出现的索引
     if (execRes) {
-      let realword = allText.substr(execRes.index, keyword.length); //根据索引和关键字长度获取原本的真实大小写关键词
-      let res = allText.replace(
-        Reg,
-        `<span style="color: red;">${realword}</span>`
-      );
-      return res;
-    } else return allText;
-  } else return allText;
-};
+      let realword = allText.substr(execRes.index, keyword.length) //根据索引和关键字长度获取原本的真实大小写关键词
+      let res = allText.replace(Reg, `<span style="color: red;">${realword}</span>`)
+      return res
+    } else return allText
+  } else return allText
+}
 
-const getColor = (color) =>
-{
+const getColor = (color) => {
   if (color) return color
-  else return '#' + Math.floor((Math.random() * 255)).toString(16) +
-    Math.floor((Math.random() * 255)).toString(16) +
-    Math.floor((Math.random() * 255)).toString(16)
+  else
+    return (
+      '#' +
+      Math.floor(Math.random() * 255).toString(16) +
+      Math.floor(Math.random() * 255).toString(16) +
+      Math.floor(Math.random() * 255).toString(16)
+    )
 }
 </script>
 
@@ -97,13 +92,10 @@ const getColor = (color) =>
         <el-input v-model="filter.search" placeholder="搜一搜" clearable show-word-limit maxlength="50"></el-input>
       </div>
       <div>
-        <span v-for="(item, index) in blogType" @click="getBlog(index, item)"
-          :class="{ isactive: state.active === index }">
+        <span v-for="(item, index) in blogType" @click="getBlog(index, item)" :class="{ isactive: state.active === index }">
           {{ translate.type(item) }}
         </span>
-        <span :class="{ isactive: state.reverseActive }" @click="getBlog(7, '', 'reverse')">
-          倒序
-        </span>
+        <span :class="{ isactive: state.reverseActive }" @click="getBlog(7, '', 'reverse')"> 倒序 </span>
       </div>
     </div>
     <el-timeline v-if="blogs.length">
@@ -114,15 +106,14 @@ const getColor = (color) =>
           <!-- <img v-if="item.pic" :src="`/blog/${item.pic}.png`" /> -->
           <!-- <img v-if="item.pic" :src="item.pic" /> -->
           <el-image v-if="item.pic" :src="item.pic" lazy :preview-src-list="[item.pic]"></el-image>
-          <p style="cursor:pointer">
+          <p style="cursor: pointer">
             收录于 <strong @click="jump(item.type)">{{ translate.type(item.type) }}</strong>
           </p>
         </el-card>
       </el-timeline-item>
     </el-timeline>
     <div v-else>
-      <el-empty image="https://zhang.beer:9999/ache/beer/blog/noData.png" description="空空如也~"
-        :image-size="320"></el-empty>
+      <el-empty image="https://zhang.beer:9999/ache/beer/blog/noData.png" description="空空如也~" :image-size="320"></el-empty>
     </div>
   </div>
 </template>
@@ -218,4 +209,5 @@ const getColor = (color) =>
       }
     }
   }
-}</style>
+}
+</style>
