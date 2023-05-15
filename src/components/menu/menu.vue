@@ -192,11 +192,16 @@ const register = () => {
   </div>
   <el-dialog v-model="showDialog" custom-class="my-dialog login">
     <template #header>
-      <img src="https://zhang.beer:9999/ache/beer/menu/login.svg" style="height: 20px; width: 40px; vertical-align: -16%" />
+      <img
+        v-if="!store.state.user.info"
+        src="https://zhang.beer:9999/ache/beer/menu/login.svg"
+        style="height: 20px; width: 40px; vertical-align: -16%"
+      />
+      <strong v-else>hello~{{ store.state.user.info.name }}</strong>
     </template>
     <el-form :model="formInfo" ref="form" :rules="rules" :key="formKey">
       <el-form-item label="用户" prop="user">
-        <el-input v-model="formInfo.user" clearable v-on:keyup.enter="submitForm"></el-input>
+        <el-input v-model="formInfo.user" clearable></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="pwd">
         <el-input
@@ -205,7 +210,7 @@ const register = () => {
           autocomplete="off"
           show-password
           clearable
-          v-on:keyup.enter="submitForm"
+          v-on:keyup.enter="!store.state.user.info ? submitForm() : null"
         ></el-input>
       </el-form-item>
     </el-form>

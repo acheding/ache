@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref, onBeforeMount } from 'vue'
+import { reactive, ref, onBeforeMount, watch } from 'vue'
 import axios from 'axios'
 import * as echarts from 'echarts'
 import { useStore } from 'vuex'
@@ -39,8 +39,14 @@ onBeforeMount(() => {
   getTable()
 })
 
+watch(
+  () => store.state.user.info,
+  () => getTable()
+)
+
 const getTable = async () => {
-  let res = await axios.get('/ache/visit/get-visitors')
+  let res =
+    store.state.user.info.role === 'admin' ? await axios.get('/ache/visit/get-visitors-all') : await axios.get('/ache/visit/get-visitors')
   tableData.value = res.data
   getLineChart()
   getCakeChart()
@@ -175,6 +181,17 @@ const deleteVisit = async (id, evt) => {
   })
   getTable()
 }
+
+const openChaipip = (ip) => {
+  let content = ip
+  const input = document.createElement('input')
+  input.value = content
+  document.body.appendChild(input)
+  input.select()
+  document.execCommand('Copy')
+  document.body.removeChild(input)
+  window.open('https://www.chaipip.com/aiwen.html')
+}
 </script>
 
 <template>
@@ -192,6 +209,11 @@ const deleteVisit = async (id, evt) => {
     <el-table-column prop="time" label="时间" min-width="200" sortable> </el-table-column>
     <el-table-column prop="ipAddress" label="IP属地" min-width="150"> </el-table-column>
     <el-table-column prop="os" label="操作系统" show-overflow-tooltip min-width="250"> </el-table-column>
+    <el-table-column label="IP" show-overflow-tooltip min-width="180" v-if="store.state.user.info.role === 'admin'">
+      <template v-slot="scope">
+        <span class="gm" @click="openChaipip(scope.row.ip)">{{ scope.row.ip }}</span>
+      </template>
+    </el-table-column>
     <el-table-column prop="screen" label="屏幕分辨率" show-overflow-tooltip min-width="150"> </el-table-column>
     <el-table-column label="操作" min-width="100" v-if="store.state.user.info.role === 'admin'">
       <template #default="scope">
@@ -209,14 +231,15 @@ const deleteVisit = async (id, evt) => {
     v-else
   >
     <el-table-column type="index" label="#" width="20" align="center"> </el-table-column>
-    <el-table-column prop="time" label="时间" sortable min-width="80"> </el-table-column>
+    <el-table-column prop="time" label="时间" sortable min-width="90"> </el-table-column>
     <el-table-column prop="ipAddress" label="IP属地" min-width="60"> </el-table-column>
-    <el-table-column prop="os" label="操作系统" show-overflow-tooltip>
-      <template #default="scope">
-        {{ scope.row.os }}
+    <el-table-column prop="os" label="操作系统" v-if="store.state.user.info.role !== 'admin'" show-overflow-tooltip></el-table-column>
+    <el-table-column prop="screen" label="分辨率" v-if="store.state.user.info.role !== 'admin'"> </el-table-column>
+    <el-table-column label="IP" v-if="store.state.user.info.role === 'admin'">
+      <template v-slot="scope">
+        <span class="gm" @click="openChaipip(scope.row.ip)">{{ scope.row.ip }}</span>
       </template>
     </el-table-column>
-    <el-table-column prop="screen" label="分辨率"> </el-table-column>
     <el-table-column label="操作" v-if="store.state.user.info.role === 'admin'">
       <template #default="scope">
         <el-button size="small" type="danger" @click="deleteVisit(scope.row.id, $event)">Delete</el-button>

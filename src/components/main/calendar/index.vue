@@ -139,7 +139,7 @@ const exchange = async (item) => {
       <el-popover placement="top-start" trigger="click" v-if="getSchedules(data).length" width="auto">
         <li v-for="item in getSchedules(data)">
           <span
-            style="cursor: pointer"
+            style="cursor: pointer; white-space: pre-wrap"
             :style="[
               item.completed === 200
                 ? 'color:red'
