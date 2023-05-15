@@ -1,6 +1,9 @@
 <script setup>
-import Menu from './components/menu/menu.vue'
-import Small from './components/menu/small.vue'
+import { defineAsyncComponent } from 'vue'
+const Menu = defineAsyncComponent(() => import('@/components/menu/menu.vue'))
+const Small = defineAsyncComponent(() => import('@/components/menu/small.vue'))
+// import Menu from './components/menu/menu.vue'
+// import Small from './components/menu/small.vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { onBeforeUnmount, ref, onBeforeMount } from 'vue'
@@ -36,7 +39,7 @@ const jump = () => window.open('https://beian.miit.gov.cn/')
     </el-aside>
     <el-main>
       <Small v-if="smallScreen"></Small>
-      <router-view v-if="route.matched[0]?.path" :smallScreen="smallScreen"></router-view>
+      <router-view :smallScreen="smallScreen"></router-view>
     </el-main>
   </el-container>
   <div v-if="!smallScreen" class="record" @click="jump">Copyright ©2021 浙ICP备2021040041号</div>
