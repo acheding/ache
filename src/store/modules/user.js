@@ -59,6 +59,7 @@ const actions = {
   exit({ commit }, form) {
     commit('setUser', '')
     commit('clearCookie', form)
+    location.reload()
     return '退出成功！'
   },
 }
