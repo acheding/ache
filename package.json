@@ -11,11 +11,11 @@
     "echarts": "^5.3.0",
     "element-plus": "^2.1.8",
     "js-md5": "^0.7.3",
+    "pinia": "^2.0.36",
     "qs": "^6.10.3",
     "sass": "^1.46.0",
     "vue": "^3.2.16",
-    "vue-router": "^4.1.6",
-    "vuex": "^4.0.2"
+    "vue-router": "^4.1.6"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.9.3",

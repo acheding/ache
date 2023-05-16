@@ -3,9 +3,11 @@ import { ref, reactive, nextTick, onBeforeMount, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import axios from 'axios'
 import qs from 'qs'
-import { useStore } from 'vuex'
+import useUserStore from '@/store//useUserStore'
+import { storeToRefs } from 'pinia'
 
-const store = useStore()
+const userStore = useUserStore()
+const { info } = storeToRefs(userStore)
 
 const state = reactive({
   showDialog: false,
@@ -103,7 +105,7 @@ const deleteIcon = async (id) => {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
   }).then(async () => {
-    if (store.state.user.info.role === 'admin') {
+    if (info.value.role === 'admin') {
       await axios.delete('/ache/icon/delete-icon', { params: { id: id } })
       ElMessage.success('删除成功！')
       getIcons()
@@ -249,8 +251,8 @@ const copy = (code) => {
       </el-form-item>
     </el-form>
     <template #footer>
-      <el-button :disabled="store.state.user.info.role !== 'admin'" plain @click="state.showDialog = false">取消 </el-button>
-      <el-button :disabled="store.state.user.info.role !== 'admin'" type="primary" @click="save">确定</el-button>
+      <el-button :disabled="info.role !== 'admin'" plain @click="state.showDialog = false">取消 </el-button>
+      <el-button :disabled="info.role !== 'admin'" type="primary" @click="save">确定</el-button>
     </template>
   </el-dialog>
 </template>

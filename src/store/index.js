@@ -1,9 +1,5 @@
-import { createStore, createLogger } from 'vuex'
-import user from './modules/user'
+import { createPinia } from 'pinia'
 
-export default createStore({
-  modules: {
-    user,
-  },
-  plugins: [createLogger()],
-})
+const pinia = createPinia()
+
+export default pinia

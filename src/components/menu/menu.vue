@@ -1,16 +1,17 @@
 <script setup>
 import { onBeforeUnmount, onMounted, ref, watch, reactive } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import menu from '../../../menu.json'
-import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
+import menu from '@/router/menu.json'
+import useUserStore from '@/store/useUserStore'
+import { storeToRefs } from 'pinia'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import visit from '../../js/visit'
+import visit from '@/js/visit'
 import axios from 'axios'
 import md5 from 'js-md5'
 
-const store = useStore()
+const userStore = useUserStore()
+const { info } = storeToRefs(userStore)
 const route = useRoute()
-const router = useRouter()
 const activeIndex = ref()
 const isFixed = ref(false)
 const showDialog = ref(false)
@@ -47,12 +48,12 @@ onBeforeUnmount(() => {
   window.removeEventListener('scroll', watchScroll, true)
 })
 const insertVisit = async () => {
-  const info = await visit.getVisitInfo()
-  params.value.time = info[0]
-  params.value.os = info[1]
-  params.value.screen = info[2]
-  params.value.agent = info[3]
-  params.value.timestamp = info[4]
+  const data = await visit.getVisitInfo()
+  params.value.time = data[0]
+  params.value.os = data[1]
+  params.value.screen = data[2]
+  params.value.agent = data[3]
+  params.value.timestamp = data[4]
   await axios.post('/ache/visit/insert-visitor', params.value)
 }
 const watchScroll = () => {
@@ -79,7 +80,7 @@ const resetForm = () => {
 const submitForm = () => {
   form.value.validate((valid, fields) => {
     if (valid) {
-      store.dispatch('user/login', formInfo.value).then((rst) => {
+      userStore.login(formInfo.value).then((rst) => {
         if (rst) {
           ElMessage({
             type: 'success',
@@ -101,7 +102,7 @@ const submitForm = () => {
   })
 }
 const exit = () => {
-  store.dispatch('user/exit', store.state.user.info).then((rst) => {
+  userStore.exit().then((rst) => {
     ElMessage({
       type: 'info',
       message: rst,
@@ -115,17 +116,17 @@ const exit = () => {
 const register = () => {
   form.value.validate(async (valid, fields) => {
     if (valid) {
-      let info = formInfo.value.user.split('?')
-      ElMessageBox.confirm('确定要注册<' + info[0] + '>用户吗？', '注册提示', {
+      let data = formInfo.value.user.split('?')
+      ElMessageBox.confirm('确定要注册<' + data[0] + '>用户吗？', '注册提示', {
         distinguishCancelAndClose: true,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
       }).then(async () => {
         let res = await axios.post('/ache/user/add-user', {
-          user: info[0],
+          user: data[0],
           pwd: md5(md5(formInfo.value.pwd) + md5(md5('1424834523'))),
-          role: info[1],
-          name: info[2],
+          role: data[1],
+          name: data[2],
         })
         if (res) {
           ElMessage({
@@ -144,7 +145,7 @@ const register = () => {
 <template>
   <div class="brand">
     <div @click="showDialog = true">
-      <ICON :class="{ logined: store.state.user.info }" class="unLogin" code="sun" :size="32" />
+      <ICON :class="{ logined: info }" class="unLogin" code="sun" :size="32" />
     </div>
     <span>轻松点，这一生，就当来旅游</span>
   </div>
@@ -192,12 +193,8 @@ const register = () => {
   </div>
   <el-dialog v-model="showDialog" custom-class="my-dialog login">
     <template #header>
-      <img
-        v-if="!store.state.user.info"
-        src="https://zhang.beer:9999/ache/beer/menu/login.svg"
-        style="height: 20px; width: 40px; vertical-align: -16%"
-      />
-      <strong v-else>hello~{{ store.state.user.info.name }}</strong>
+      <img v-if="!info" src="https://zhang.beer:9999/ache/beer/menu/login.svg" style="height: 20px; width: 40px; vertical-align: -16%" />
+      <strong v-else>hello~{{ info.name }}</strong>
     </template>
     <el-form :model="formInfo" ref="form" :rules="rules" :key="formKey">
       <el-form-item label="用户" prop="user">
@@ -210,15 +207,15 @@ const register = () => {
           autocomplete="off"
           show-password
           clearable
-          v-on:keyup.enter="!store.state.user.info ? submitForm() : null"
+          v-on:keyup.enter="!info ? submitForm() : null"
         ></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
-      <el-button type="success" v-if="store.state.user.info.role === 'admin'" @click="register">注册</el-button>
-      <el-button type="success" v-if="!store.state.user.info" @click="submitForm">登录</el-button>
-      <el-button type="primary" v-if="!store.state.user.info" @click="resetForm">重置</el-button>
-      <el-button type="danger" v-if="store.state.user.info" @click="exit">退出登录</el-button>
+      <el-button type="success" v-if="info.role === 'admin'" @click="register">注册</el-button>
+      <el-button type="success" v-if="!info" @click="submitForm">登录</el-button>
+      <el-button type="primary" v-if="!info" @click="resetForm">重置</el-button>
+      <el-button type="danger" v-if="info" @click="exit">退出登录</el-button>
     </template>
   </el-dialog>
 </template>

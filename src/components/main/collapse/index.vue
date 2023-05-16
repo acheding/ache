@@ -1,11 +1,13 @@
 <script setup>
 import { reactive, ref, nextTick, onBeforeMount } from 'vue'
 import axios from 'axios'
-import { useStore } from 'vuex'
+import useUserStore from '@/store/useUserStore'
+import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
-const store = useStore()
+const userStore = useUserStore()
+const { info } = storeToRefs(userStore)
 const route = useRoute()
 
 const props = defineProps({
@@ -193,7 +195,7 @@ const translate = async () => {
   <el-collapse v-model="state.activeName" accordion>
     <el-collapse-item v-for="(item, index) in words" :title="item.zhcn" :name="(index + 1).toString()" @change="state.activeId = item.id">
       <div>{{ item.enus }}</div>
-      <div class="minus" v-if="store.state.user.info.role === 'admin' && state.activeId === item.id" @click="deleteWord(item.id)">
+      <div class="minus" v-if="info.role === 'admin' && state.activeId === item.id" @click="deleteWord(item.id)">
         <ICON code="minus" />
       </div>
     </el-collapse-item>
@@ -243,7 +245,7 @@ const translate = async () => {
       </el-form-item>
     </el-form>
     <template #footer>
-      <el-button type="success" :disabled="store.state.user.info.role !== 'admin'" @click="addWord">添加</el-button>
+      <el-button type="success" :disabled="info.role !== 'admin'" @click="addWord">添加</el-button>
     </template>
   </el-dialog>
 </template>

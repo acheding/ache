@@ -1,12 +1,11 @@
-import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
-import path from "path";
-// import externalGlobals from "rollup-plugin-external-globals";
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import path from 'path'
 
 export default defineConfig({
   resolve: {
     alias: {
-      "@": path.join(__dirname, "./src"),
+      '@': path.join(__dirname, './src'),
     },
   },
   plugins: [vue()],
@@ -14,13 +13,13 @@ export default defineConfig({
     port: 3333, // 打开的端口号
     open: false, // 运行时打开浏览器
     proxy: {
-      "/ache": {
-        target: "https://zhang.beer/",
+      '/ache': {
+        target: 'https://zhang.beer/',
         // target: "http://localhost:8080/",
         secure: false,
       },
-      "/other": {
-        target: "https://zhang.beer/",
+      '/other': {
+        target: 'https://zhang.beer/',
         secure: false,
       },
       // "/ip": "https://pv.sohu.com/cityjson?ie=utf-8",
@@ -39,39 +38,13 @@ export default defineConfig({
       },
     },
     rollupOptions: {
-      // 以下文件不打包
-      // external: [
-      //   "vue",
-      //   "element-plus",
-      //   "@element-plus/icons-vue",
-      //   // "vuex",
-      //   // "axios",
-      //   // "vue-router",
-      //   // "echarts",
-      // ],
-      // plugins: [
-      //   // 打包时自动将代码中的引入替换成cdn引入
-      //   externalGlobals({
-      //     vue: "Vue",
-      //     "element-plus": "ElementPlus",
-      //     "@element-plus/icons-vue": "ElementPlusIconsVue",
-      //     vuex: "Vuex",
-      //     axios: "axios",
-      //     "vue-router": "VueRouter",
-      //     echarts: "echarts",
-      //   }),
-      // ],
       output: {
         manualChunks(id) {
-          if (id.includes("node_modules")) {
-            return id
-              .toString()
-              .split("node_modules/")[1]
-              .split("/")[0]
-              .toString();
+          if (id.includes('node_modules')) {
+            return id.toString().split('node_modules/')[1].split('/')[0].toString()
           }
         },
       },
     },
   },
-});
+})

@@ -2,16 +2,12 @@
 import { defineAsyncComponent } from 'vue'
 const Menu = defineAsyncComponent(() => import('@/components/menu/menu.vue'))
 const Small = defineAsyncComponent(() => import('@/components/menu/small.vue'))
-// import Menu from './components/menu/menu.vue'
-// import Small from './components/menu/small.vue'
-import { useRoute } from 'vue-router'
-import { useStore } from 'vuex'
+import useUserStore from './store/useUserStore'
 import { onBeforeUnmount, ref, onBeforeMount } from 'vue'
-const route = useRoute()
-const store = useStore()
+const userStore = useUserStore()
 
 onBeforeMount(() => {
-  store.dispatch('user/login') // 在整个页面加载之前加上headers
+  userStore.login() // 在整个页面加载之前加上headers
   renderResize()
   window.addEventListener('resize', renderResize)
 })

@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import menu from '../../menu.json'
+import menu from '@/router/menu.json'
 const modules = import.meta.glob('/src/views/*.vue')
 
 const getRoute = (menu, parentPath) => {

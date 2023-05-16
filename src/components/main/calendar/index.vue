@@ -1,11 +1,13 @@
 <script setup>
 import axios from 'axios'
 import { computed, onMounted, reactive, ref, nextTick, watch } from 'vue'
-import { useStore } from 'vuex'
+import useUserStore from '@/store/useUserStore'
+import { storeToRefs } from 'pinia'
 import { ElMessage } from 'element-plus'
 import time from '@/utils/time'
 
-const store = useStore()
+const userStore = useUserStore()
+const { info } = storeToRefs(userStore)
 
 const state = reactive({
   schedules: [],
@@ -25,7 +27,7 @@ onMounted(() => {
 })
 
 watch(
-  () => store.state.user.info,
+  () => info.value,
   () => {
     updateSchedules()
     state.exchangeArr = []

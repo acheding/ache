@@ -1,7 +1,7 @@
 <script setup>
-import { reactive } from 'vue'
-import Calendar from '../calendar/index.vue'
-import Collapse from '../collapse/index.vue'
+import { reactive, defineAsyncComponent } from 'vue'
+const Calendar = defineAsyncComponent(() => import('../calendar/index.vue'))
+const Collapse = defineAsyncComponent(() => import('../collapse/index.vue'))
 
 const props = defineProps({
   smallScreen: Boolean,
@@ -26,7 +26,6 @@ const state = reactive({
         '今天中午吃什么，搬运自github上的一个开源项目，解决吃什么的世纪难题。',
         'https://zhang.beer/eat',
       ],
-      pic: 'https://zhang.beer:9999/ache/beer/main/one.svg',
     },
     {
       title: '功能简介',
@@ -38,7 +37,6 @@ const state = reactive({
         '图标中心支持图标的增删改查和组件代码复制，图标采用后端接口调用图标，数据库存储图标，前端图标组件化复用等方式，统一管理，极大提升了开发与维护效率，节约时间成本，为图标的使用提供了新的解题思路。网站图标均从数据库调用。',
         '关于页显示所有访客浏览记录，同一设备同一浏览器10分钟之内仅记录一次,并根据时间段和设备类型作出图表统计。',
       ],
-      pic: 'https://zhang.beer:9999/ache/beer/main/two.svg',
     },
   ],
 })
@@ -50,20 +48,8 @@ const jump = (url) => {
 <template>
   <el-row>
     <el-col>
-      <!-- <el-carousel type="card" height="336px">
-        <el-carousel-item v-for="item in state.wallpapers" :key="item.title">
-          <el-image :src="item.pic" fit="fill" style="height: 100%; width: 100%" lazy></el-image>
-          <div class="word">
-            <div style="margin-left: 32px">
-              <p>{{ item.title }}</p>
-              <p>{{ item.content }}</p>
-            </div>
-          </div>
-        </el-carousel-item>
-      </el-carousel> -->
       <el-carousel height="360px" direction="vertical" :interval="8000">
         <el-carousel-item v-for="(item, i) in state.wallpapers" :key="item.title">
-          <!-- <el-image :src="item.pic" fit="fill" style="height: 100%; width: 100%"></el-image> -->
           <div class="word">
             <div style="margin-left: 32px">
               <p>{{ item.title }}</p>
@@ -95,18 +81,6 @@ const jump = (url) => {
 }
 
 :deep(.el-carousel) {
-  // .el-carousel__item--card {
-  //   width: 560px;
-  // }
-
-  // .is-active {
-  //   transform: translateX(154px) !important;
-  //   // 总体宽度868-560后除以2等于154
-  // }
-
-  // ul {
-  //   display: none;
-  // }
   ul {
     .el-carousel__button {
       background: lightblue;
@@ -118,7 +92,6 @@ const jump = (url) => {
     left: 6%;
     top: 24px;
     text-align: left;
-    // color: #ffffff;
     color: #524c4c;
     width: 88%;
     height: calc(100% - 48px);
@@ -144,7 +117,6 @@ const jump = (url) => {
     content: '';
     width: 4px;
     height: 80%;
-    // background: #ffffff;
     background: #42b983;
     opacity: 0.44;
     top: 10%;

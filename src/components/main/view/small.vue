@@ -1,6 +1,7 @@
 <script setup>
-import Calendar from '../calendar/index.vue'
-import Collapse from '../collapse/index.vue'
+import { defineAsyncComponent } from 'vue'
+const Calendar = defineAsyncComponent(() => import('../calendar/index.vue'))
+const Collapse = defineAsyncComponent(() => import('../collapse/index.vue'))
 
 const props = defineProps({
   smallScreen: Boolean,
