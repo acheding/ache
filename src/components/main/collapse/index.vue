@@ -209,7 +209,7 @@ const translate = async () => {
     <ICON code="plus" />
   </div>
 
-  <el-dialog v-model="state.showDialog" :custom-class="`my-dialog ${smallScreen ? 'general' : 'icon'}`">
+  <el-dialog v-model="state.showDialog" :class="`my-dialog ${smallScreen ? 'general' : 'icon'}`">
     <template #header>
       <ICON code="plus" />
       添加句子

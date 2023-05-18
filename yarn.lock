@@ -23,9 +23,9 @@
   integrity sha512-EvYTiXet5XqweYGClEmpu3BoxmsQ4hkj3QaYA6qEnigCWffTP3vNRwBReTdrwDwo7OoJ3wM8Uoe9Uk4n+d4hfg==
 
 "@floating-ui/dom@^1.0.1":
-  version "1.2.7"
-  resolved "https://registry.npmmirror.com/@floating-ui/dom/-/dom-1.2.7.tgz#c123e4db014b07b97e996cd459245fa217049c6b"
-  integrity sha512-DyqylONj1ZaBnzj+uBnVfzdjjCkFCL2aA9ESHLyUOGSqb03RpbLMImP1ekIQXYs4KLk9jAjJfZAU8hXfWSahEg==
+  version "1.2.8"
+  resolved "https://registry.npmmirror.com/@floating-ui/dom/-/dom-1.2.8.tgz#aee0f6ccc0787ab8fe741487a6e5e95b7b125375"
+  integrity sha512-XLwhYV90MxiHDq6S0rzFZj00fnDM+A1R9jhSioZoMsa7G0Q0i+Q4x40ajR8FHSdYDE1bgjG45mIWe6jtv9UPmg==
   dependencies:
     "@floating-ui/core" "^1.2.6"
 
@@ -260,7 +260,7 @@ echarts@^5.3.0:
     tslib "2.3.0"
     zrender "5.3.0"
 
-element-plus@^2.1.8:
+element-plus@^2.3.4:
   version "2.3.4"
   resolved "https://registry.npmmirror.com/element-plus/-/element-plus-2.3.4.tgz#4319f6b0a1096cfac9c53b69da2fe23ac5aea63e"
   integrity sha512-SQr0J9z7N4z48WYk/l9NE2tizl8Q7j2OhqlpTc42k4pGncry3+rVX6dsmcsglFynn6vt3NzYxWJqmLFyDKQq+g==

@@ -133,38 +133,30 @@ const exchange = async (item) => {
         <ICON code="about" />
       </template>
       <span class="gm" style="margin-right: 16px" @click="displayDialog('添加日程', 'add')"> 添加日程 </span>
-      <span class="gm" @click="state.showOperation = !state.showOperation">{{ state.showOperation ? '隐藏操作' : '显示操作' }}</span>
+      <span class="gm" @click="state.showOperation = !state.showOperation">{{ state.showOperation ? '隐藏操作' : '显示操作'
+      }}</span>
     </el-popover>
   </div>
-  <el-calendar v-model="state.value"
-    ><template #dateCell="{ data }">
+  <el-calendar v-model="state.value"><template #date-cell="{ data }">
       <el-popover placement="top-start" trigger="click" v-if="getSchedules(data).length" width="auto">
         <li v-for="item in getSchedules(data)">
-          <span
-            style="cursor: pointer; white-space: pre-wrap"
-            :style="[
-              item.completed === 200
-                ? 'color:red'
-                : item.completed === 100
+          <span style="cursor: pointer; white-space: pre-wrap" :style="[
+            item.completed === 200
+              ? 'color:red'
+              : item.completed === 100
                 ? 'color:#5cb87a'
                 : item.completed >= 60
-                ? 'color:#6f7ad3'
-                : item.completed >= 40
-                ? 'color:#e6a23c'
-                : item.completed >= 20
-                ? 'color:#f56c6c'
-                : 'color:#909399',
-            ]"
-            @click="exchange(item)"
-            >{{ item.event }}</span
-          ><span class="gm" style="float: right" v-show="state.showOperation" @click="deleteSchedule(item.id)">delete</span
-          ><span
-            class="gm"
-            style="margin: 0 8px; float: right"
-            v-show="state.showOperation"
-            @click="displayDialog('编辑日程', 'edit', item)"
-            >edit</span
-          ><span v-if="item.completed" style="margin-left: 8px"> —{{ item.completed }}%</span>
+                  ? 'color:#6f7ad3'
+                  : item.completed >= 40
+                    ? 'color:#e6a23c'
+                    : item.completed >= 20
+                      ? 'color:#f56c6c'
+                      : 'color:#909399',
+          ]" @click="exchange(item)">{{ item.event }}</span><span class="gm" style="float: right"
+            v-show="state.showOperation" @click="deleteSchedule(item.id)">delete</span><span class="gm"
+            style="margin: 0 8px; float: right" v-show="state.showOperation"
+            @click="displayDialog('编辑日程', 'edit', item)">edit</span><span v-if="item.completed" style="margin-left: 8px">
+            —{{ item.completed }}%</span>
         </li>
         <template #reference>
           <div class="hasSchedules" @click="getDate(data)">
@@ -175,23 +167,16 @@ const exchange = async (item) => {
       <div v-else @click="getDate(data)">
         {{ data.day.split('-').slice(2).join('') }}
       </div>
-    </template></el-calendar
-  >
+    </template></el-calendar>
 
-  <el-dialog v-model="state.showDialog" custom-class="my-dialog general">
+  <el-dialog v-model="state.showDialog" class="my-dialog general">
     <template #header>
       <span>{{ state.dialogTitle }}</span>
     </template>
     <el-form :model="aSchedule" ref="form" :rules="rules" :key="formKey" :label-width="52">
       <el-form-item label="日期" prop="date">
-        <el-date-picker
-          :editable="false"
-          v-model="aSchedule.date"
-          type="date"
-          placeholder="选择日期"
-          format="YYYY/MM/DD"
-          value-format="YYYY-MM-DD"
-        >
+        <el-date-picker :editable="false" v-model="aSchedule.date" type="date" placeholder="选择日期" format="YYYY/MM/DD"
+          value-format="YYYY-MM-DD">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="事件" prop="event">

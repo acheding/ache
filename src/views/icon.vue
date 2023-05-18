@@ -216,7 +216,7 @@ const copy = (code) => {
     </div>
   </div>
 
-  <el-dialog v-model="state.showDialog" :custom-class="`my-dialog ${smallScreen ? 'general' : 'icon'}`">
+  <el-dialog v-model="state.showDialog" :class="`my-dialog ${smallScreen ? 'general' : 'icon'}`">
     <template #header>
       <ICON :code="state.mode" />
       <span>{{ state.mode === 'add' ? '添加' : '编辑' }}图标</span>
@@ -229,16 +229,8 @@ const copy = (code) => {
         <el-input v-model="formData.code" maxlength="50" show-word-limit @keyup.enter="save"></el-input>
       </el-form-item>
       <el-form-item label="图标" prop="icon" v-if="state.mode === 'add'">
-        <el-upload
-          ref="upload"
-          action="/ache/icon/add-icon"
-          accept=".svg"
-          :auto-upload="false"
-          :show-file-list="false"
-          :data="{ name: formData.name, code: formData.code }"
-          :on-change="handleChange"
-          :on-success="onSuccess"
-        >
+        <el-upload ref="upload" action="/ache/icon/add-icon" accept=".svg" :auto-upload="false" :show-file-list="false"
+          :data="{ name: formData.name, code: formData.code }" :on-change="handleChange" :on-success="onSuccess">
           <img v-if="formData.xml" :src="formData.xml" />
           <ICON v-else code="add" :size="148" color="#888" />
         </el-upload>
@@ -389,7 +381,7 @@ const copy = (code) => {
           }
         }
 
-        i + i {
+        i+i {
           margin-left: 12px;
         }
       }
