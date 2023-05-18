@@ -137,7 +137,7 @@ const exchange = async (item) => {
       }}</span>
     </el-popover>
   </div>
-  <el-calendar v-model="state.value"><template #date-cell="{ data }">
+  <el-calendar v-model="state.value"><template #dateCell="{ data }">
       <el-popover placement="top-start" trigger="click" v-if="getSchedules(data).length" width="auto">
         <li v-for="item in getSchedules(data)">
           <span style="cursor: pointer; white-space: pre-wrap" :style="[
@@ -169,8 +169,8 @@ const exchange = async (item) => {
       </div>
     </template></el-calendar>
 
-  <el-dialog v-model="state.showDialog" class="my-dialog general">
-    <template #header>
+  <el-dialog v-model="state.showDialog" custom-class="my-dialog general">
+    <template #title>
       <span>{{ state.dialogTitle }}</span>
     </template>
     <el-form :model="aSchedule" ref="form" :rules="rules" :key="formKey" :label-width="52">
