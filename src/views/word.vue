@@ -3,8 +3,10 @@ import { reactive, ref } from 'vue'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
+import useWordStore from '../store/useWordStore'
 
 const router = useRouter()
+const { setWord } = useWordStore()
 
 const props = defineProps({
   smallScreen: Boolean,
@@ -134,7 +136,8 @@ const copy = () => {
   })
 }
 const jump = () => {
-  router.push({ name: 'main', params: { word: state.result } })
+  setWord(state.result)
+  router.push({ name: 'main' })
 }
 </script>
 
@@ -153,21 +156,14 @@ const jump = () => {
     </div>
   </div>
 
-  <el-dialog
-    v-model="state.showDialog"
-    v-if="state.showDialog"
-    :custom-class="`my-dialog ${smallScreen ? 'smallNormal' : state.dialogData.icon === 'hdpic' ? 'normal' : 'small'}`"
-  >
+  <el-dialog v-model="state.showDialog" v-if="state.showDialog"
+    :custom-class="`my-dialog ${smallScreen ? 'smallNormal' : state.dialogData.icon === 'hdpic' ? 'normal' : 'small'}`">
     <template #header>
       <div class="title">
         <img :src="`https://zhang.beer:9999/ache/beer/word/${state.dialogData.icon}.svg`" />
         <span>{{ state.dialogData.name }}</span>
-        <el-tooltip
-          v-if="state.dialogData.icon !== 'hdpic'"
-          content="点击句子可复制到剪切板，点击添加可跳转到首页添加此句子。"
-          placement="top-start"
-          effect="light"
-        >
+        <el-tooltip v-if="state.dialogData.icon !== 'hdpic'" content="点击句子可复制到剪切板，点击添加可跳转到首页添加此句子。" placement="top-start"
+          effect="light">
           <ICON code="about" />
         </el-tooltip>
       </div>

@@ -3,7 +3,7 @@ import { onBeforeMount, ref, watch } from 'vue'
 import axios from 'axios'
 const props = defineProps({
   code: String,
-  size: Number,
+  size: String,
   tooltip: {
     type: Boolean,
     default: true,

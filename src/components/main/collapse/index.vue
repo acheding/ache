@@ -1,14 +1,16 @@
 <script setup>
-import { reactive, ref, nextTick, onBeforeMount } from 'vue'
+import { reactive, ref, nextTick, onBeforeMount, onBeforeUnmount } from 'vue'
 import axios from 'axios'
 import useUserStore from '@/store/useUserStore'
+import useWordStore from '@/store/useWordStore'
 import { storeToRefs } from 'pinia'
-import { useRoute } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const userStore = useUserStore()
+const wordStore = useWordStore()
 const { info } = storeToRefs(userStore)
-const route = useRoute()
+const { word } = storeToRefs(wordStore)
+const { clearWord } = useWordStore()
 
 const props = defineProps({
   smallScreen: Boolean,
@@ -23,12 +25,14 @@ const state = reactive({
 
 onBeforeMount(() => {
   getWords()
-  if (route.params.word) {
-    formInfo.value.zhcn = route.params.word
+  if (word.value) {
+    formInfo.value.zhcn = word.value
     showDialog()
     translate()
   }
 })
+
+onBeforeUnmount(() => clearWord())
 
 const words = ref([])
 const getWords = async () => {
@@ -193,7 +197,8 @@ const translate = async () => {
 
 <template>
   <el-collapse v-model="state.activeName" accordion>
-    <el-collapse-item v-for="(item, index) in words" :title="item.zhcn" :name="(index + 1).toString()" @change="state.activeId = item.id">
+    <el-collapse-item v-for="(item, index) in words" :title="item.zhcn" :name="(index + 1).toString()"
+      @change="state.activeId = item.id">
       <div>{{ item.enus }}</div>
       <div class="minus" v-if="info.role === 'admin' && state.activeId === item.id" @click="deleteWord(item.id)">
         <ICON code="minus" />
@@ -211,37 +216,21 @@ const translate = async () => {
     </template>
     <el-form :model="formInfo" ref="form" :rules="rules" :label-width="52">
       <el-form-item label="句子" prop="zhcn">
-        <el-input
-          type="textarea"
-          :rows="3"
-          placeholder="请输入句子"
-          v-model="formInfo.zhcn"
-          clearable
-          v-on:keyup.enter="translate"
-        ></el-input>
+        <el-input type="textarea" :rows="3" placeholder="请输入句子" v-model="formInfo.zhcn" clearable
+          v-on:keyup.enter="translate"></el-input>
       </el-form-item>
       <el-form-item label="语言" prop="lang">
         <el-select v-model="formInfo.lang" placeholder="请选择翻译语言" filterable>
           <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
-        <el-button
-          v-loading="state.loading"
-          type="primary"
-          :style="[smallScreen ? 'margin-top: 16px;display:block' : 'margin-left: 28px']"
-          @click="translate"
-        >
+        <el-button v-loading="state.loading" type="primary"
+          :style="[smallScreen ? 'margin-top: 16px;display:block' : 'margin-left: 28px']" @click="translate">
           翻译
         </el-button>
       </el-form-item>
       <el-form-item label="外文" prop="enus">
-        <el-input
-          type="textarea"
-          :rows="3"
-          placeholder="请输入外文，可手动输入或者自动翻译"
-          v-model="formInfo.enus"
-          clearable
-          v-on:keyup.enter="addWord"
-        ></el-input>
+        <el-input type="textarea" :rows="3" placeholder="请输入外文，可手动输入或者自动翻译" v-model="formInfo.enus" clearable
+          v-on:keyup.enter="addWord"></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -278,6 +267,7 @@ const translate = async () => {
 .minus,
 .plus {
   margin-top: 8px;
+
   &:hover {
     cursor: pointer;
     color: #42b983;
@@ -286,6 +276,7 @@ const translate = async () => {
 
 .minus {
   cursor: pointer;
+
   i:hover {
     color: orangered;
   }
