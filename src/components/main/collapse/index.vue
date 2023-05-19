@@ -209,7 +209,7 @@ const translate = async () => {
   </div>
 
   <el-dialog v-model="state.showDialog" :custom-class="`my-dialog ${smallScreen ? 'general' : 'icon'}`">
-    <template #header>
+    <template #title>
       <ICON code="plus" />
       添加句子
     </template>
@@ -282,6 +282,7 @@ const translate = async () => {
 .minus,
 .plus {
   margin-top: 8px;
+
   &:hover {
     cursor: pointer;
     color: #42b983;
@@ -290,6 +291,7 @@ const translate = async () => {
 
 .minus {
   cursor: pointer;
+
   i:hover {
     color: orangered;
   }

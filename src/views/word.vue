@@ -159,9 +159,9 @@ const jump = () => {
   <el-dialog
     v-model="state.showDialog"
     v-if="state.showDialog"
-    :custom-class="`my-dialog ${smallScreen ? 'smallNormal' : state.dialogData.icon === 'hdpic' ? 'normal' : 'small'}`"
+    :class="`my-dialog ${smallScreen ? 'smallNormal' : state.dialogData.icon === 'hdpic' ? 'normal' : 'small'}`"
   >
-    <template #header>
+    <template #title>
       <div class="title">
         <img :src="`https://zhang.beer:9999/ache/beer/word/${state.dialogData.icon}.svg`" />
         <span>{{ state.dialogData.name }}</span>
