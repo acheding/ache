@@ -1,14 +1,16 @@
 <script setup>
-import { reactive, ref, nextTick, onBeforeMount } from 'vue'
+import { reactive, ref, nextTick, onBeforeMount, onBeforeUnmount } from 'vue'
 import axios from 'axios'
 import useUserStore from '@/store/useUserStore'
+import useWordStore from '@/store/useWordStore'
 import { storeToRefs } from 'pinia'
-import { useRoute } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const userStore = useUserStore()
+const wordStore = useWordStore()
 const { info } = storeToRefs(userStore)
-const route = useRoute()
+const { collectWord } = storeToRefs(wordStore)
+const { clearWord } = wordStore
 
 const props = defineProps({
   smallScreen: Boolean,
@@ -23,12 +25,14 @@ const state = reactive({
 
 onBeforeMount(() => {
   getWords()
-  if (route.params.word) {
-    formInfo.value.zhcn = route.params.word
+  if (collectWord.value) {
+    formInfo.value.zhcn = collectWord.value
     showDialog()
     translate()
   }
 })
+
+onBeforeUnmount(() => clearWord())
 
 const words = ref([])
 const getWords = async () => {

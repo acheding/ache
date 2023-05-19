@@ -3,8 +3,10 @@ import { reactive, ref } from 'vue'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
+import useWordStore from '@/store/useWordStore'
 
 const router = useRouter()
+const { setWord } = useWordStore()
 
 const props = defineProps({
   smallScreen: Boolean,
@@ -134,7 +136,8 @@ const copy = () => {
   })
 }
 const jump = () => {
-  router.push({ name: 'main', params: { word: state.result } })
+  setWord(state.result)
+  router.push({ name: 'main' })
 }
 </script>
 
