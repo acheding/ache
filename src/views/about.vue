@@ -11,7 +11,7 @@ const props = defineProps({
 
 const userStore = useUserStore()
 const { info } = storeToRefs(userStore)
-
+let loading = ref(false)
 const state = reactive({
   chartNumbers: [0, 0, 0, 0, 0, 0, 0],
   chartTimePeriod: ['0-5', '5-8', '8-11', '11-13', '13-16', '16-19', '19-0'],
@@ -47,9 +47,11 @@ watch(
 )
 
 const getTable = async () => {
+  loading.value = true
   let res = info.value.role === 'admin' ? await axios.get('/ache/visit/get-visitors-all') : await axios.get('/ache/visit/get-visitors')
   tableData.value = res.data
   Promise.all([getLineChart(), getCakeChart()])
+  loading.value = false
 }
 
 const getLineChart = () => {
@@ -197,14 +199,8 @@ const openChaipip = (ip) => {
 <template>
   <h1>近期访客</h1>
 
-  <el-table
-    :data="tableData"
-    stripe
-    style="width: 100%"
-    max-height="480"
-    :default-sort="{ prop: 'id', order: 'descending' }"
-    v-if="!props.smallScreen"
-  >
+  <el-table :data="tableData" stripe style="width: 100%" height="480" :default-sort="{ prop: 'id', order: 'descending' }"
+    v-if="!props.smallScreen" v-loading="loading">
     <el-table-column type="index" label="#" width="50" align="center"> </el-table-column>
     <el-table-column prop="time" label="时间" min-width="200" sortable> </el-table-column>
     <el-table-column prop="ipAddress" label="IP属地" min-width="150"> </el-table-column>
@@ -222,14 +218,8 @@ const openChaipip = (ip) => {
     </el-table-column>
   </el-table>
 
-  <el-table
-    :data="tableData"
-    stripe
-    style="width: 100%; font-size: 10px"
-    max-height="480"
-    :default-sort="{ prop: 'id', order: 'descending' }"
-    v-else
-  >
+  <el-table :data="tableData" stripe style="width: 100%; font-size: 10px" height="480"
+    :default-sort="{ prop: 'id', order: 'descending' }" v-else v-loading="loading">
     <el-table-column type="index" label="#" width="20" align="center"> </el-table-column>
     <el-table-column prop="time" label="时间" sortable min-width="90"> </el-table-column>
     <el-table-column prop="ipAddress" label="IP属地" min-width="60"> </el-table-column>
