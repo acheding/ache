@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
+// import externalGlobals from 'rollup-plugin-external-globals'
 
 export default defineConfig({
   resolve: {
@@ -45,6 +46,18 @@ export default defineConfig({
           }
         },
       },
+      // external: ['vue', 'vue-demi', 'element-plus', 'pinia', 'axios', 'vue-router', 'echarts'],
+      // plugins: [
+      //   externalGlobals({
+      //     vue: 'Vue',
+      //     'vue-demi': 'VueDemi',
+      //     'element-plus': 'ElementPlus',
+      //     pinia: 'Pinia',
+      //     axios: 'axios',
+      //     'vue-router': 'VueRouter',
+      //     echarts: 'echarts',
+      //   }),
+      // ],
     },
   },
 })

@@ -92,7 +92,8 @@ const getColor = (color) => {
         <el-input v-model="filter.search" placeholder="搜一搜" clearable show-word-limit maxlength="50"></el-input>
       </div>
       <div>
-        <span v-for="(item, index) in blogType" @click="getBlog(index, item)" :class="{ isactive: state.active === index }">
+        <span v-for="(item, index) in blogType" @click="getBlog(index, item)"
+          :class="{ isactive: state.active === index }">
           {{ translate.type(item) }}
         </span>
         <span :class="{ isactive: state.reverseActive }" @click="getBlog(7, '', 'reverse')"> 倒序 </span>
@@ -113,7 +114,7 @@ const getColor = (color) => {
       </el-timeline-item>
     </el-timeline>
     <div v-else>
-      <el-empty image="https://zhang.beer:9999/ache/beer/blog/noData.png" description="空空如也~" :image-size="320"></el-empty>
+      <el-empty image="https://zhang.beer/static/images/noData.png" description="空空如也~" :image-size="320"></el-empty>
     </div>
   </div>
 </template>

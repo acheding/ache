@@ -145,7 +145,7 @@ const jump = () => {
   <div class="cards" :class="{ smallScreen: smallScreen }">
     <div v-for="item in apis" :key="item.api" class="card" @click="getWords(item)">
       <div class="portrait">
-        <img :src="`https://zhang.beer:9999/ache/beer/word/${item.icon}.svg`" />
+        <img :src="`https://zhang.beer/static/images/${item.icon}.svg`" />
       </div>
       <div class="content">
         <div>
@@ -156,21 +156,14 @@ const jump = () => {
     </div>
   </div>
 
-  <el-dialog
-    v-model="state.showDialog"
-    v-if="state.showDialog"
-    :class="`my-dialog ${smallScreen ? 'smallNormal' : state.dialogData.icon === 'hdpic' ? 'normal' : 'small'}`"
-  >
+  <el-dialog v-model="state.showDialog" v-if="state.showDialog"
+    :class="`my-dialog ${smallScreen ? 'smallNormal' : state.dialogData.icon === 'hdpic' ? 'normal' : 'small'}`">
     <template #title>
       <div class="title">
-        <img :src="`https://zhang.beer:9999/ache/beer/word/${state.dialogData.icon}.svg`" />
+        <img :src="`https://zhang.beer/static/images/${state.dialogData.icon}.svg`" />
         <span>{{ state.dialogData.name }}</span>
-        <el-tooltip
-          v-if="state.dialogData.icon !== 'hdpic'"
-          content="点击句子可复制到剪切板，点击添加可跳转到首页添加此句子。"
-          placement="top-start"
-          effect="light"
-        >
+        <el-tooltip v-if="state.dialogData.icon !== 'hdpic'" content="点击句子可复制到剪切板，点击添加可跳转到首页添加此句子。" placement="top-start"
+          effect="light">
           <ICON code="about" />
         </el-tooltip>
       </div>
