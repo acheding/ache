@@ -43,7 +43,8 @@ watch(
   (newValue, oldValue) => {
     activeIndex.value = newValue[newValue.length - 1].path
     document.title = 'Ache | ' + newValue[newValue.length - 1].name
-  }
+  },
+  { immediate: true }
 )
 watch(
   () => scrollTop.value,
