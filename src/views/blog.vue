@@ -34,7 +34,7 @@ watch(
 
 const init = async () => {
   await getBlog()
-  blogType.value = [...blogType.value, ...new Set(blogs.value.map(x => x.type))]
+  blogType.value = [...['全部'], ...new Set(blogs.value.map(x => x.type))]
 }
 
 const jump = (type, url) => {

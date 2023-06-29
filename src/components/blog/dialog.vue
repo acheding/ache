@@ -19,7 +19,7 @@ let formRef = ref(null)
 let formData = ref({
     title: '',
     type: '',
-    url: 'https://zhang.beer/vuepress/blog/',
+    url: '',
     detail: '',
     pic: '',
     time: time.format(new Date(), 'yyyy-MM-dd hh:mm:ss'),
@@ -36,9 +36,9 @@ const save = () => {
     formRef.value.validate(async (valid, fields) => {
         if (valid) {
             axios.post('/ache/blog/add-blog', formData.value)
+            emit('update')
             ElMessage.success('添加成功！')
             props.showDialog.show = false
-            emit('update')
         }
     })
 }
