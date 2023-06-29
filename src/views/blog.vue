@@ -1,7 +1,7 @@
 <script setup>
-import { ref, onBeforeMount, watch, reactive } from 'vue'
+import { ref, onBeforeMount, watch, reactive, nextTick } from 'vue'
 import axios from 'axios'
-import translate from '../utils/translate.js'
+import MyDialog from '@/components/blog/dialog.vue'
 
 const props = defineProps({
   smallScreen: Boolean,
@@ -11,17 +11,19 @@ const state = reactive({
   active: 0,
   reverseActive: false,
 })
-const blogType = ref(['all', 'css', 'vue', 'micro', 'server'])
+const blogType = ref(['全部'])
 const blogs = ref([])
 const filter = ref({
   sort: '',
   type: '',
   search: '',
 })
-
-onBeforeMount(() => {
-  getBlog()
+let showDialog = ref({
+  show: false,
+  key: 0
 })
+
+onBeforeMount(() => init())
 
 watch(
   () => filter.value.search,
@@ -30,6 +32,11 @@ watch(
   }
 )
 
+const init = async () => {
+  await getBlog()
+  blogType.value = [...blogType.value, ...new Set(blogs.value.map(x => x.type))]
+}
+
 const jump = (type, url) => {
   let suffix = url ? '/' + url + '.html' : ''
   window.open('https://zhang.beer/vuepress/blog/' + type + suffix)
@@ -37,7 +44,7 @@ const jump = (type, url) => {
 
 const getBlog = async (index, type, sort) => {
   if (type) {
-    if (type === 'all') filter.value.type = ''
+    if (type === '全部') filter.value.type = ''
     else filter.value.type = type
     state.active = index
   }
@@ -83,18 +90,26 @@ const getColor = (color) => {
       Math.floor(Math.random() * 255).toString(16)
     )
 }
+
+const addBlog = () => {
+  showDialog.value.show = true
+  showDialog.value.key++
+}
 </script>
 
 <template>
   <div :class="{ smallScreen: smallScreen }">
     <div class="search">
-      <div>
+      <div class="search-add">
         <el-input v-model="filter.search" placeholder="搜一搜" clearable show-word-limit maxlength="50"></el-input>
+        <el-button type="primary" plain @click="addBlog">
+          <ICON code="add" />
+        </el-button>
       </div>
       <div>
         <span v-for="(item, index) in blogType" @click="getBlog(index, item)"
           :class="{ isactive: state.active === index }">
-          {{ translate.type(item) }}
+          {{ item }}
         </span>
         <span :class="{ isactive: state.reverseActive }" @click="getBlog(7, '', 'reverse')"> 倒序 </span>
       </div>
@@ -108,7 +123,7 @@ const getColor = (color) => {
           <!-- <img v-if="item.pic" :src="item.pic" /> -->
           <el-image v-if="item.pic" :src="item.pic" lazy :preview-src-list="[item.pic]"></el-image>
           <p style="cursor: pointer">
-            收录于 <strong @click="jump(item.type)">{{ translate.type(item.type) }}</strong>
+            收录于 <strong @click="jump(item.type)">{{ item.type }}</strong>
           </p>
         </el-card>
       </el-timeline-item>
@@ -117,6 +132,8 @@ const getColor = (color) => {
       <el-empty image="https://zhang.beer/static/images/noData.png" description="空空如也~" :image-size="320"></el-empty>
     </div>
   </div>
+  <MyDialog :key="showDialog.key" :showDialog="showDialog" :smallScreen="smallScreen" :blogType="blogType" @update="init">
+  </MyDialog>
 </template>
 
 <style scoped lang="scss">
@@ -130,10 +147,37 @@ const getColor = (color) => {
   justify-content: center;
   gap: 5px;
 
-  .el-input {
-    --el-input-focus-border: grey;
-    --el-input-focus-border-color: grey;
+  .search-add {
+    display: flex;
+    gap: 8px;
+
+    .el-input {
+      --el-input-focus-border: grey;
+      --el-input-focus-border-color: grey;
+    }
+
+    .el-button {
+      padding: 8px;
+    }
+
+    .el-button--primary.is-plain {
+      background: transparent;
+      border-color: #dcdfe6;
+      color: grey;
+    }
+
+    .el-button--primary.is-plain:hover {
+      color: grey;
+      border-color: #c0c4cc;
+    }
+
+    .el-button--primary.is-plain:focus {
+      color: grey;
+      border-color: grey;
+    }
   }
+
+
 
   span {
     margin-right: 8px;

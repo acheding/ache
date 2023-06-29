@@ -7,7 +7,7 @@ import useUserStore from '@/store//useUserStore'
 import { storeToRefs } from 'pinia'
 
 const userStore = useUserStore()
-const { info } = storeToRefs(userStore)
+const { isAdmin } = storeToRefs(userStore)
 
 const state = reactive({
   showDialog: false,
@@ -105,7 +105,7 @@ const deleteIcon = async (id) => {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
   }).then(async () => {
-    if (info.value.role === 'admin') {
+    if (isAdmin.value) {
       await axios.delete('/ache/icon/delete-icon', { params: { id: id } })
       ElMessage.success('删除成功！')
       getIcons()
@@ -178,7 +178,7 @@ const copy = (code) => {
       <span>编码</span>
       <el-input v-model="filter.code" clearable></el-input>
     </div>
-    <el-button type="primary" plain @click="addIcon">
+    <el-button type="primary" plain @click="addIcon" v-if="!smallScreen">
       <ICON code="add" />
     </el-button>
   </div>
@@ -216,7 +216,7 @@ const copy = (code) => {
     </div>
   </div>
 
-  <el-dialog v-model="state.showDialog" :custom-class="`my-dialog ${smallScreen ? 'general' : 'icon'}`">
+  <el-dialog v-model="state.showDialog" :custom-class="`my-dialog ${smallScreen ? 'general' : 'noHeight'}`">
     <template #header>
       <ICON :code="state.mode" />
       <span>{{ state.mode === 'add' ? '添加' : '编辑' }}图标</span>
@@ -229,16 +229,8 @@ const copy = (code) => {
         <el-input v-model="formData.code" maxlength="50" show-word-limit @keyup.enter="save"></el-input>
       </el-form-item>
       <el-form-item label="图标" prop="icon" v-if="state.mode === 'add'">
-        <el-upload
-          ref="upload"
-          action="/ache/icon/add-icon"
-          accept=".svg"
-          :auto-upload="false"
-          :show-file-list="false"
-          :data="{ name: formData.name, code: formData.code }"
-          :on-change="handleChange"
-          :on-success="onSuccess"
-        >
+        <el-upload ref="upload" action="/ache/icon/add-icon" accept=".svg" :auto-upload="false" :show-file-list="false"
+          :data="{ name: formData.name, code: formData.code }" :on-change="handleChange" :on-success="onSuccess">
           <img v-if="formData.xml" :src="formData.xml" />
           <ICON v-else code="add" :size="148" color="#888" />
         </el-upload>
@@ -251,8 +243,8 @@ const copy = (code) => {
       </el-form-item>
     </el-form>
     <template #footer>
-      <el-button :disabled="info.role !== 'admin'" plain @click="state.showDialog = false">取消 </el-button>
-      <el-button :disabled="info.role !== 'admin'" type="primary" @click="save">确定</el-button>
+      <el-button :disabled="!isAdmin" plain @click="state.showDialog = false">取消 </el-button>
+      <el-button :disabled="!isAdmin" type="primary" @click="save">确定</el-button>
     </template>
   </el-dialog>
 </template>
@@ -389,7 +381,7 @@ const copy = (code) => {
           }
         }
 
-        i + i {
+        i+i {
           margin-left: 12px;
         }
       }

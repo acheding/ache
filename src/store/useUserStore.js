@@ -7,6 +7,7 @@ const useUserStore = defineStore('useUserStore', {
   state: () => {
     return {
       info: '',
+      isAdmin: false,
     }
   },
   actions: {
@@ -21,6 +22,7 @@ const useUserStore = defineStore('useUserStore', {
         const rst = await axios.post('/ache/login', data)
         if (rst.data) {
           this.info = rst.data
+          this.isAdmin = rst.data.role === 'admin'
           setCookie(data)
           axios.interceptors.request.use((config) => {
             config.headers['Authorization'] = data.user + '=' + data.pwd
@@ -45,6 +47,7 @@ const useUserStore = defineStore('useUserStore', {
               const rst = await axios.post('/ache/login', data)
               if (rst.data) {
                 this.info = rst.data
+                this.isAdmin = rst.data.role === 'admin'
                 axios.interceptors.request.use((config) => {
                   config.headers['Authorization'] = data.user + '=' + data.pwd
                   return config
@@ -62,6 +65,7 @@ const useUserStore = defineStore('useUserStore', {
 
     exit() {
       this.info = ''
+      this.isAdmin = false
       clearCookie()
       location.reload()
       return '退出成功！'

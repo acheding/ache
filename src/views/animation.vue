@@ -217,7 +217,7 @@ const props = defineProps({
 </template>
 
 <script>
-import animation from '../js/animation'
+import animation from '@/utils/animation'
 
 export default {
   mounted() {

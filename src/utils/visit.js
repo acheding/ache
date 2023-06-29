@@ -1,4 +1,4 @@
-import time from '../utils/time'
+import time from './time'
 import axios from 'axios'
 class VISIT {
   getVisitInfo() {

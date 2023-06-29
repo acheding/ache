@@ -5,12 +5,12 @@ import menu from '@/router/menu.json'
 import useUserStore from '@/store/useUserStore'
 import { storeToRefs } from 'pinia'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import visit from '@/js/visit'
+import visit from '@/utils/visit'
 import axios from 'axios'
 import md5 from 'js-md5'
 
 const userStore = useUserStore()
-const { info } = storeToRefs(userStore)
+const { info, isAdmin } = storeToRefs(userStore)
 const route = useRoute()
 const activeIndex = ref()
 const isFixed = ref(false)
@@ -35,9 +35,11 @@ const rules = reactive({
 
 watch(
   () => route.matched,
-  (newValue, oldValue) => {
-    activeIndex.value = newValue[newValue.length - 1].path
-    document.title = 'Ache | ' + newValue[newValue.length - 1].name
+  (newValue) => {
+    if (newValue.length) {
+      activeIndex.value = newValue[newValue.length - 1].path
+      document.title = 'Ache | ' + newValue[newValue.length - 1].name
+    }
   },
   { immediate: true }
 )
@@ -209,7 +211,7 @@ const register = () => {
       </el-form-item>
     </el-form>
     <template #footer>
-      <el-button type="success" v-if="info.role === 'admin'" @click="register">注册</el-button>
+      <el-button type="success" v-if="isAdmin" @click="register">注册</el-button>
       <el-button type="success" v-if="!info" @click="submitForm">登录</el-button>
       <el-button type="primary" v-if="!info" @click="resetForm">重置</el-button>
       <el-button type="danger" v-if="info" @click="exit">退出登录</el-button>

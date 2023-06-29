@@ -8,7 +8,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 
 const userStore = useUserStore()
 const wordStore = useWordStore()
-const { info } = storeToRefs(userStore)
+const { isAdmin } = storeToRefs(userStore)
 const { collectWord } = storeToRefs(wordStore)
 const { clearWord } = wordStore
 
@@ -197,9 +197,10 @@ const translate = async () => {
 
 <template>
   <el-collapse v-model="state.activeName" accordion>
-    <el-collapse-item v-for="(item, index) in words" :title="item.zhcn" :name="(index + 1).toString()" @change="state.activeId = item.id">
+    <el-collapse-item v-for="(item, index) in words" :title="item.zhcn" :name="(index + 1).toString()"
+      @change="state.activeId = item.id">
       <div>{{ item.enus }}</div>
-      <div class="minus" v-if="info.role === 'admin' && state.activeId === item.id" @click="deleteWord(item.id)">
+      <div class="minus" v-if="isAdmin && state.activeId === item.id" @click="deleteWord(item.id)">
         <ICON code="minus" />
       </div>
     </el-collapse-item>
@@ -208,48 +209,32 @@ const translate = async () => {
     <ICON code="plus" />
   </div>
 
-  <el-dialog v-model="state.showDialog" :custom-class="`my-dialog ${smallScreen ? 'general' : 'icon'}`">
+  <el-dialog v-model="state.showDialog" :custom-class="`my-dialog ${smallScreen ? 'general' : 'noHeight'}`">
     <template #title>
       <ICON code="plus" />
       添加句子
     </template>
     <el-form :model="formInfo" ref="form" :rules="rules" :label-width="52">
       <el-form-item label="句子" prop="zhcn">
-        <el-input
-          type="textarea"
-          :rows="3"
-          placeholder="请输入句子"
-          v-model="formInfo.zhcn"
-          clearable
-          v-on:keyup.enter="translate"
-        ></el-input>
+        <el-input type="textarea" :rows="3" placeholder="请输入句子" v-model="formInfo.zhcn" clearable
+          v-on:keyup.enter="translate"></el-input>
       </el-form-item>
       <el-form-item label="语言" prop="lang">
         <el-select v-model="formInfo.lang" placeholder="请选择翻译语言" filterable>
           <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
-        <el-button
-          v-loading="state.loading"
-          type="primary"
-          :style="[smallScreen ? 'margin-top: 16px;display:block' : 'margin-left: 28px']"
-          @click="translate"
-        >
+        <el-button v-loading="state.loading" type="primary"
+          :style="[smallScreen ? 'margin-top: 16px;display:block' : 'margin-left: 28px']" @click="translate">
           翻译
         </el-button>
       </el-form-item>
       <el-form-item label="外文" prop="enus">
-        <el-input
-          type="textarea"
-          :rows="3"
-          placeholder="请输入外文，可手动输入或者自动翻译"
-          v-model="formInfo.enus"
-          clearable
-          v-on:keyup.enter="addWord"
-        ></el-input>
+        <el-input type="textarea" :rows="3" placeholder="请输入外文，可手动输入或者自动翻译" v-model="formInfo.enus" clearable
+          v-on:keyup.enter="addWord"></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
-      <el-button type="success" :disabled="info.role !== 'admin'" @click="addWord">添加</el-button>
+      <el-button type="success" :disabled="!isAdmin" @click="addWord">添加</el-button>
     </template>
   </el-dialog>
 </template>
