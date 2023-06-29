@@ -17,13 +17,13 @@ const props = defineProps({
 const emit = defineEmits(['update'])
 let formRef = ref(null)
 let formData = ref({
-    type: '',
-    time: time.format(new Date(), 'yyyy-MM-dd hh:mm:ss'),
-    color: '',
     title: '',
+    type: '',
+    url: 'https://zhang.beer/vuepress/blog/',
     detail: '',
     pic: '',
-    url: '',
+    time: time.format(new Date(), 'yyyy-MM-dd hh:mm:ss'),
+    color: '',
 })
 
 const rules = ref({
