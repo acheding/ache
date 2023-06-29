@@ -35,7 +35,7 @@ const rules = ref({
 const save = () => {
     formRef.value.validate(async (valid, fields) => {
         if (valid) {
-            axios.post('/ache/blog/add-blog', formData.value)
+            await axios.post('/ache/blog/add-blog', formData.value)
             emit('update')
             ElMessage.success('添加成功！')
             props.showDialog.show = false
