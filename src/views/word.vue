@@ -76,6 +76,12 @@ const apis = ref([
     api: 'https://www.hi2future.com/',
     abstract: '给未来写一封信吧',
   },
+  {
+    icon: 'chatgpt',
+    name: 'ChatGPT',
+    api: 'https://guangming.zeabur.app/',
+    abstract: 'github上的一个开源项目，结合Vercel实现国内部署访问，密码8个6',
+  },
 ])
 
 const getWords = async (item) => {
@@ -84,7 +90,7 @@ const getWords = async (item) => {
   if (item.icon !== 'hdpic') {
     detail(item)
   }
-  if (item.icon !== 'dog' && item.icon !== 'letter') {
+  if (item.icon !== 'dog' && item.icon !== 'letter' && item.icon !== 'chatgpt') {
     state.showDialog = true
   }
 }
@@ -115,7 +121,7 @@ const detail = async (item, evt) => {
     } else {
       window.open('https://api.ixiaowai.cn/' + state.radio + '.php')
     }
-  } else if (item.icon === 'dog' || item.icon === 'letter') {
+  } else if (item.icon === 'dog' || item.icon === 'letter' || item.icon === 'chatgpt') {
     window.open(item.api)
   }
 }
@@ -156,14 +162,21 @@ const jump = () => {
     </div>
   </div>
 
-  <el-dialog v-model="state.showDialog" v-if="state.showDialog"
-    :class="`my-dialog ${smallScreen ? 'smallNormal' : state.dialogData.icon === 'hdpic' ? 'normal' : 'small'}`">
+  <el-dialog
+    v-model="state.showDialog"
+    v-if="state.showDialog"
+    :class="`my-dialog ${smallScreen ? 'smallNormal' : state.dialogData.icon === 'hdpic' ? 'normal' : 'small'}`"
+  >
     <template #title>
       <div class="title">
         <img :src="`https://zhang.beer/static/images/${state.dialogData.icon}.svg`" />
         <span>{{ state.dialogData.name }}</span>
-        <el-tooltip v-if="state.dialogData.icon !== 'hdpic'" content="点击句子可复制到剪切板，点击添加可跳转到首页添加此句子。" placement="top-start"
-          effect="light">
+        <el-tooltip
+          v-if="state.dialogData.icon !== 'hdpic'"
+          content="点击句子可复制到剪切板，点击添加可跳转到首页添加此句子。"
+          placement="top-start"
+          effect="light"
+        >
           <ICON code="about" />
         </el-tooltip>
       </div>

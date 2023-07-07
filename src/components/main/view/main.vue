@@ -14,10 +14,8 @@ const state = reactive({
     {
       title: '网站简介',
       content: [
-        '网站由vite+Vue3+element-plus构建，采用nginx部署前端，docker部署后端的方式在ubuntu服务器上搭建。',
-        '接口由SpringBoot编写，部分为nginx转发，数据存储于mysql。',
-        '管理员角色可注册用户，用户默认角色为访客，部分操作隐藏或受限。',
-        '登录信息分别存储于浏览器cookie和pinia中，cookie用于两小时内自动登录，pinia则可以根据用户角色的不同显示不同页面。',
+        '网站由vite+Vue3+element-plus构建，采用nginx部署前端，docker部署后端的方式在ubuntu服务器上搭建。接口由SpringBoot编写，部分为nginx转发，数据存储于mysql。',
+        '管理员角色可注册用户，用户默认角色为访客，部分操作隐藏或受限。登录信息分别存储于浏览器cookie和pinia中，cookie用于两小时内自动登录，pinia则可以根据用户角色的不同显示不同页面。',
         '另外几个网站：',
         '博客，一个由VuePress搭建的文档网站，分享自己一段时间的收获、经验，也是一段时间的总结。',
         'https://zhang.beer/vuepress',
@@ -25,6 +23,8 @@ const state = reactive({
         'https://zhang.beer/diary',
         '今天中午吃什么，搬运自github上的一个开源项目，解决吃什么的世纪难题。',
         'https://zhang.beer/eat',
+        'ChatGPT，github上的一个开源项目，结合Vercel实现国内部署访问。',
+        'https://guangming.zeabur.app',
       ],
     },
     {
@@ -54,7 +54,7 @@ const jump = (url) => {
             <div style="margin-left: 32px">
               <p>{{ item.title }}</p>
               <p v-for="(section, j) in item.content">
-                <span v-if="i === 0 && [6, 8, 10].includes(j)" class="gm" @click="jump(section)">{{ section }}</span>
+                <span v-if="i === 0 && [4, 6, 8, 10].includes(j)" class="gm" @click="jump(section)">{{ section }}</span>
                 <span v-else>{{ section }}</span>
               </p>
             </div>
