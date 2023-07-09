@@ -162,21 +162,14 @@ const jump = () => {
     </div>
   </div>
 
-  <el-dialog
-    v-model="state.showDialog"
-    v-if="state.showDialog"
-    :class="`my-dialog ${smallScreen ? 'smallNormal' : state.dialogData.icon === 'hdpic' ? 'normal' : 'small'}`"
-  >
+  <el-dialog v-model="state.showDialog" v-if="state.showDialog"
+    :class="`my-dialog ${smallScreen ? 'smallNormal' : state.dialogData.icon === 'hdpic' ? 'normal' : 'small'}`">
     <template #title>
       <div class="title">
         <img :src="`https://zhang.beer/static/images/${state.dialogData.icon}.svg`" />
         <span>{{ state.dialogData.name }}</span>
-        <el-tooltip
-          v-if="state.dialogData.icon !== 'hdpic'"
-          content="点击句子可复制到剪切板，点击添加可跳转到首页添加此句子。"
-          placement="top-start"
-          effect="light"
-        >
+        <el-tooltip v-if="state.dialogData.icon !== 'hdpic'" content="点击句子可复制到剪切板，点击添加可跳转到首页添加此句子。" placement="top-start"
+          effect="light">
           <ICON code="about" />
         </el-tooltip>
       </div>
@@ -295,7 +288,7 @@ const jump = () => {
   margin-top: 0px; // 720/6=120 120-100-6=14
   padding: 16px;
   gap: 24px;
-  height: 1092px; // 不写高度的话有些机型会粘在一起 720+100*3+24*3
+  height: 1216px; // 不写高度的话有些机型会粘在一起 10*100+9*24
 
   .card {
     &:hover {
