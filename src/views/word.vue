@@ -80,7 +80,7 @@ const apis = ref([
     icon: 'chatgpt',
     name: 'ChatGPT',
     api: 'https://guangming.zeabur.app/',
-    abstract: 'github上的一个开源项目，结合Vercel实现国内部署访问，密码8个6',
+    abstract: 'github上的一个开源项目，结合Zeabur实现国内部署访问，密码8个6',
   },
 ])
 
