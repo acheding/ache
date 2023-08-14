@@ -79,7 +79,7 @@ const apis = ref([
   {
     icon: 'chatgpt',
     name: 'ChatGPT',
-    api: 'https://guangming.zeabur.app/',
+    api: 'https://chat.zhang.beer',
     abstract: 'github上的一个开源项目，结合Zeabur实现国内部署访问，密码8个6',
   },
 ])
@@ -162,14 +162,21 @@ const jump = () => {
     </div>
   </div>
 
-  <el-dialog v-model="state.showDialog" v-if="state.showDialog"
-    :class="`my-dialog ${smallScreen ? 'smallNormal' : state.dialogData.icon === 'hdpic' ? 'normal' : 'small'}`">
+  <el-dialog
+    v-model="state.showDialog"
+    v-if="state.showDialog"
+    :class="`my-dialog ${smallScreen ? 'smallNormal' : state.dialogData.icon === 'hdpic' ? 'normal' : 'small'}`"
+  >
     <template #title>
       <div class="title">
         <img :src="`https://zhang.beer/static/images/${state.dialogData.icon}.svg`" />
         <span>{{ state.dialogData.name }}</span>
-        <el-tooltip v-if="state.dialogData.icon !== 'hdpic'" content="点击句子可复制到剪切板，点击添加可跳转到首页添加此句子。" placement="top-start"
-          effect="light">
+        <el-tooltip
+          v-if="state.dialogData.icon !== 'hdpic'"
+          content="点击句子可复制到剪切板，点击添加可跳转到首页添加此句子。"
+          placement="top-start"
+          effect="light"
+        >
           <ICON code="about" />
         </el-tooltip>
       </div>

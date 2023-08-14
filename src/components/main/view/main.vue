@@ -24,7 +24,7 @@ const state = reactive({
         '今天中午吃什么，搬运自github上的一个开源项目，解决吃什么的世纪难题。',
         'https://zhang.beer/eat',
         'ChatGPT，github上的一个开源项目，结合Zeabur实现国内部署访问。',
-        'https://guangming.zeabur.app',
+        'https://chat.zhang.beer',
       ],
     },
     {
