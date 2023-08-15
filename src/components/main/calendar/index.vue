@@ -118,7 +118,7 @@ const exchange = async (item) => {
     })
     ElMessage({
       type: 'success',
-      message: '位置交换成功！',
+      message: '位置交换成功',
     })
     updateSchedules()
     state.exchangeArr = []

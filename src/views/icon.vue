@@ -107,10 +107,10 @@ const deleteIcon = async (id) => {
   }).then(async () => {
     if (isAdmin.value) {
       await axios.delete('/ache/icon/delete-icon', { params: { id: id } })
-      ElMessage.success('删除成功！')
+      ElMessage.success('删除成功')
       getIcons()
     } else {
-      ElMessage.error('只有管理员才能执行此操作！')
+      ElMessage.error('只有管理员才能执行此操作')
     }
   })
 }
@@ -136,7 +136,7 @@ const save = () => {
           xml: formData.value.xml,
         }
         axios.put('/ache/icon/edit-icon', qs.stringify(params))
-        ElMessage.success('编辑成功！')
+        ElMessage.success('编辑成功')
       }
       state.showDialog = false
     }
@@ -144,9 +144,9 @@ const save = () => {
 }
 const onSuccess = (response) => {
   if (!response) {
-    ElMessage.error('图标编码重复！')
+    ElMessage.error('图标编码重复')
   } else {
-    ElMessage.success('添加成功！')
+    ElMessage.success('添加成功')
     getIcons()
   }
 }
@@ -229,8 +229,16 @@ const copy = (code) => {
         <el-input v-model="formData.code" maxlength="50" show-word-limit @keyup.enter="save"></el-input>
       </el-form-item>
       <el-form-item label="图标" prop="icon" v-if="state.mode === 'add'">
-        <el-upload ref="upload" action="/ache/icon/add-icon" accept=".svg" :auto-upload="false" :show-file-list="false"
-          :data="{ name: formData.name, code: formData.code }" :on-change="handleChange" :on-success="onSuccess">
+        <el-upload
+          ref="upload"
+          action="/ache/icon/add-icon"
+          accept=".svg"
+          :auto-upload="false"
+          :show-file-list="false"
+          :data="{ name: formData.name, code: formData.code }"
+          :on-change="handleChange"
+          :on-success="onSuccess"
+        >
           <img v-if="formData.xml" :src="formData.xml" />
           <ICON v-else code="add" :size="148" color="#888" />
         </el-upload>
@@ -381,7 +389,7 @@ const copy = (code) => {
           }
         }
 
-        i+i {
+        i + i {
           margin-left: 12px;
         }
       }

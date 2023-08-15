@@ -68,7 +68,7 @@ const useUserStore = defineStore('useUserStore', {
       this.isAdmin = false
       clearCookie()
       location.reload()
-      return '退出成功！'
+      return '退出成功'
     },
   },
 })

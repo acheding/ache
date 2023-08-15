@@ -87,7 +87,7 @@ const submitForm = () => {
         if (rst) {
           ElMessage({
             type: 'success',
-            message: '登录成功！',
+            message: '登录成功',
             showClose: true,
             grouping: true,
           })
@@ -95,7 +95,7 @@ const submitForm = () => {
         } else {
           ElMessage({
             type: 'error',
-            message: '登录失败！请重新登录！',
+            message: '登录失败请重新登录',
             showClose: true,
             grouping: true,
           })
@@ -134,7 +134,7 @@ const register = () => {
         if (res) {
           ElMessage({
             type: 'success',
-            message: '注册成功！',
+            message: '注册成功',
             showClose: true,
             grouping: true,
           })
@@ -161,8 +161,7 @@ const register = () => {
               <ICON :code="item.icon" />
               <span class="title">{{ item.title }}</span>
             </template>
-            <el-menu-item class="el-menu-item" v-for="sub in item.children" :key="sub.name"
-              :index="item.router + sub.router">
+            <el-menu-item class="el-menu-item" v-for="sub in item.children" :key="sub.name" :index="item.router + sub.router">
               <ICON :code="item.icon" />
               <span class="title">{{ sub.title }}</span>
             </el-menu-item>
@@ -197,8 +196,7 @@ const register = () => {
   </div>
   <el-dialog v-model="showDialog" custom-class="my-dialog login">
     <template #header>
-      <img v-if="!info" src="https://zhang.beer/static/images/login.svg"
-        style="height: 20px; width: 40px; vertical-align: -16%" />
+      <img v-if="!info" src="https://zhang.beer/static/images/login.svg" style="height: 20px; width: 40px; vertical-align: -16%" />
       <strong v-else>hello~{{ info.name }}</strong>
     </template>
     <el-form :model="formInfo" ref="form" :rules="rules" :key="formKey">
@@ -206,8 +204,14 @@ const register = () => {
         <el-input v-model="formInfo.user" clearable></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="pwd">
-        <el-input type="password" v-model="formInfo.pwd" autocomplete="off" show-password clearable
-          v-on:keyup.enter="!info ? submitForm() : null"></el-input>
+        <el-input
+          type="password"
+          v-model="formInfo.pwd"
+          autocomplete="off"
+          show-password
+          clearable
+          v-on:keyup.enter="!info ? submitForm() : null"
+        ></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
