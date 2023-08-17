@@ -32,7 +32,7 @@ const params = ref({
 const form = ref(null)
 const formKey = ref(0)
 const rules = reactive({
-  user: [{ required: true, message: '请输入用户', trigger: ['blur', 'change'] }],
+  user: [{ required: true, message: '请输入帐号', trigger: ['blur', 'change'] }],
   pwd: [{ required: true, message: '请输入密码', trigger: ['blur', 'change'] }],
 })
 const drawer = ref(false)
@@ -140,7 +140,7 @@ const register = () => {
   form.value.validate(async (valid, fields) => {
     if (valid) {
       let data = formInfo.value.user.split('?')
-      ElMessageBox.confirm('确定要注册<' + data[0] + '>用户吗？', '注册提示', {
+      ElMessageBox.confirm('确定要注册<' + data[0] + '>帐号吗？', '注册提示', {
         distinguishCancelAndClose: true,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -222,7 +222,7 @@ const register = () => {
       <strong v-else>hello~{{ info.name }}</strong>
     </template>
     <el-form :model="formInfo" ref="form" :rules="rules" :key="formKey">
-      <el-form-item label="用户" prop="user">
+      <el-form-item label="帐号" prop="user">
         <el-input v-model="formInfo.user" clearable></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="pwd">

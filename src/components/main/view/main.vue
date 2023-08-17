@@ -15,15 +15,15 @@ const state = reactive({
       title: '网站简介',
       content: [
         '网站由vite+Vue3+element-plus+pinia构建，采用nginx部署前端，docker部署后端的方式在ubuntu服务器上搭建。接口由SpringBoot编写，部分为nginx转发。',
-        '管理员角色可注册用户，用户默认角色为访客，部分操作隐藏或受限。',
-        '（账号：test，密码：123456）',
+        '管理员角色可注册帐号，帐号默认角色为访客，部分操作隐藏或受限。',
+        '（帐号：test，密码：123456）',
         '另外几个网站：',
         '博客，一个由VuePress搭建的文档网站，分享自己一段时间的收获、经验，也是一段时间的总结。',
-        'https://zhang.beer/vuepress',
+        'https://zhang.beer/vuepress（https://blog.zhang.beer）',
         '日记本，一个可以记录日常的网站，有上传图片，评论，回复等功能。与此网站的账号、数据互通。',
-        'https://zhang.beer/diary',
+        'https://zhang.beer/diary（https://diary.zhang.beer）',
         '今天中午吃什么，搬运自github上的一个开源项目，解决吃什么的世纪难题。',
-        'https://zhang.beer/eat',
+        'https://zhang.beer/eat（https://eat.zhang.beer）',
         'ChatGPT，github上的一个开源项目，结合Vercel部署实现国内可访问。',
         'https://chat.zhang.beer',
       ],
@@ -41,8 +41,8 @@ const state = reactive({
     },
   ],
 })
-const jump = (url) => {
-  window.open(url)
+const jump = (section) => {
+  window.open(section.split('（')[0])
 }
 </script>
 
