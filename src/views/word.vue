@@ -137,8 +137,6 @@ const copy = () => {
   ElMessage({
     type: 'success',
     message: '已复制到剪切板',
-    'show-close': true,
-    grouping: true,
   })
 }
 const jump = () => {

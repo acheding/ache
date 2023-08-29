@@ -193,19 +193,33 @@ const translate = async () => {
   state.loading = false
   formInfo.value.enus = res.data.trans_result[0].dst
 }
+
+const copy = (item) => {
+  let content = item.zhcn + item.enus
+  const input = document.createElement('input')
+  input.value = content
+  document.body.appendChild(input)
+  input.select()
+  document.execCommand('Copy')
+  document.body.removeChild(input)
+  ElMessage({
+    type: 'success',
+    message: '已复制到剪切板',
+  })
+}
 </script>
 
 <template>
   <el-collapse v-model="state.activeName" accordion>
     <el-collapse-item v-for="(item, index) in words" :title="item.zhcn" :name="(index + 1).toString()" @change="state.activeId = item.id">
-      <div>{{ item.enus }}</div>
-      <div class="minus" v-if="isAdmin && state.activeId === item.id" @click="deleteWord(item.id)">
-        <ICON code="minus" />
+      <div @click="copy(item)">{{ item.enus }}</div>
+      <div class="minus" v-if="isAdmin && state.activeId === item.id">
+        <ICON code="minus" @click="deleteWord(item.id)" />
       </div>
     </el-collapse-item>
   </el-collapse>
-  <div class="plus" @click="showDialog()">
-    <ICON code="plus" />
+  <div class="plus">
+    <ICON code="plus" @click="showDialog()" />
   </div>
 
   <el-dialog v-model="state.showDialog" :custom-class="`my-dialog ${smallScreen ? 'general' : 'noHeight'}`">
@@ -282,17 +296,18 @@ const translate = async () => {
 .minus,
 .plus {
   margin-top: 8px;
+}
 
-  &:hover {
+.plus {
+  i:hover {
     cursor: pointer;
     color: #42b983;
   }
 }
 
 .minus {
-  cursor: pointer;
-
   i:hover {
+    cursor: pointer;
     color: orangered;
   }
 }
