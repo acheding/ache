@@ -1,9 +1,10 @@
 <script setup>
-import { reactive, ref, onBeforeMount, watch } from 'vue'
+import { reactive, ref, onBeforeMount, watch, watchEffect } from 'vue'
 import axios from 'axios'
 import * as echarts from 'echarts'
 import useUserStore from '@/store/useUserStore'
 import { storeToRefs } from 'pinia'
+import gsap from 'gsap'
 
 const props = defineProps({
   smallScreen: Boolean,
@@ -36,6 +37,9 @@ const state = reactive({
 })
 
 const tableData = ref([])
+let peopleTime = ref({
+  num: 0,
+})
 
 onBeforeMount(() => {
   getTable()
@@ -45,6 +49,13 @@ watch(
   () => info.value,
   () => getTable()
 )
+
+watchEffect(() => {
+  gsap.to(peopleTime.value, {
+    duration: 0.5,
+    num: Number(tableData.value[0]?.id) || 0,
+  })
+})
 
 const getTable = async () => {
   loading.value = true
@@ -197,10 +208,11 @@ const openChaipip = (ip) => {
 </script>
 
 <template>
-  <h1>近期访客</h1>
+  <h1>
+    近期访客<span class="peopleTime">（历史访问人次：{{ peopleTime.num.toFixed(0) }}）</span>
+  </h1>
 
-  <el-table :data="tableData" stripe style="width: 100%" height="480" :default-sort="{ prop: 'id', order: 'descending' }"
-    v-if="!props.smallScreen" v-loading="loading">
+  <el-table :data="tableData" stripe style="width: 100%" height="480" v-if="!props.smallScreen" v-loading="loading">
     <el-table-column type="index" label="#" width="50" align="center"> </el-table-column>
     <el-table-column prop="time" label="时间" min-width="200" sortable> </el-table-column>
     <el-table-column prop="ipAddress" label="IP属地" min-width="150"> </el-table-column>
@@ -218,8 +230,15 @@ const openChaipip = (ip) => {
     </el-table-column>
   </el-table>
 
-  <el-table :data="tableData" stripe style="width: 100%; font-size: 10px" height="480"
-    :default-sort="{ prop: 'id', order: 'descending' }" v-else v-loading="loading">
+  <el-table
+    :data="tableData"
+    stripe
+    style="width: 100%; font-size: 10px"
+    height="480"
+    :default-sort="{ prop: 'id', order: 'descending' }"
+    v-else
+    v-loading="loading"
+  >
     <el-table-column type="index" label="#" width="20" align="center"> </el-table-column>
     <el-table-column prop="time" label="时间" sortable min-width="90"> </el-table-column>
     <el-table-column prop="ipAddress" label="IP属地" min-width="60"> </el-table-column>
@@ -255,6 +274,13 @@ const openChaipip = (ip) => {
   border-radius: 2px;
   background: #3053ea;
   transition: transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.peopleTime {
+  position: absolute;
+  font-size: 16px;
+  margin-top: 8px;
+  margin-left: 8px;
 }
 
 .chart {
