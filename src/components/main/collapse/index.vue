@@ -18,7 +18,6 @@ const props = defineProps({
 
 const state = reactive({
   activeName: '1',
-  activeId: null,
   showDialog: false,
   loading: false,
 })
@@ -38,7 +37,6 @@ const words = ref([])
 const getWords = async () => {
   let res = await axios.get('ache/words/get-words')
   words.value = res.data
-  state.activeId = res.data[0].id
   words.value.forEach((i) => {
     console.log(i.zhcn)
   })
@@ -211,9 +209,9 @@ const copy = (item) => {
 
 <template>
   <el-collapse v-model="state.activeName" accordion>
-    <el-collapse-item v-for="(item, index) in words" :title="item.zhcn" :name="(index + 1).toString()" @change="state.activeId = item.id">
+    <el-collapse-item v-for="(item, index) in words" :title="item.zhcn" :name="(index + 1).toString()">
       <div @click="copy(item)">{{ item.enus }}</div>
-      <div class="minus" v-if="isAdmin && state.activeId === item.id">
+      <div class="minus" v-if="isAdmin">
         <ICON code="minus" @click="deleteWord(item.id)" />
       </div>
     </el-collapse-item>
