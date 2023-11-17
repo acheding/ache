@@ -70,7 +70,7 @@ const watchScroll = () => {
 }
 const jump = (address) => {
   if (address === 'github') {
-    window.open('https://github.com/fadeache')
+    window.open('https://github.com/acheding')
   } else {
     window.open('https://blog.csdn.net/bDreamer')
   }
