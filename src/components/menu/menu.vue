@@ -181,7 +181,7 @@ const register = () => {
       <el-image src="https://zhang.beer/static/images/vx.jpg" lazy />
     </div>
     <div class="author-name">
-      <strong>zhang</strong>
+      <strong>acheding</strong>
     </div>
     <div class="links">
       <div @click="jump('github')">
